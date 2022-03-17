@@ -188,48 +188,55 @@ class Message extends StatelessWidget {
     bool currentUserIsAuthor,
     bool enlargeEmojis,
   ) {
-    return bubbleBuilder != null
-        ? bubbleBuilder!(
-            _messageBuilder(),
-            message: message,
-            nextMessageInGroup: roundBorder,
-          )
-        : enlargeEmojis && hideBackgroundOnEmojiMessages
-            ? _messageBuilder()
-            : Container(
-                decoration: BoxDecoration(
-                  borderRadius: borderRadius,
-                  color: !currentUserIsAuthor ||
-                          message.type == types.MessageType.image
-                      ? InheritedChatTheme.of(context).theme.secondaryColor
-                      : InheritedChatTheme.of(context).theme.primaryColor,
-                ),
-                child: ClipRRect(
-                  borderRadius: borderRadius,
-                  child: Column(
-                    children: [
-                      _messageBuilder(),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Container(
-                          padding:
-                              const EdgeInsets.only(right: 16, bottom: 4, top: 4),
-                          child:  Text(
-                            messageTime(
-                              DateTime.fromMillisecondsSinceEpoch(message.createdAt!),
-                              dateLocale: dateLocale,
-                              timeFormat: timeFormat,
-                            ),
-                            style: InheritedChatTheme.of(context)
-                                .theme
-                                  .dateDividerTextStyle,
-                          ),
-                        ),
-                      )
-                    ],
+    return Column(
+        crossAxisAlignment: currentUserIsAuthor
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
+      children: [
+        bubbleBuilder != null
+            ? bubbleBuilder!(
+                _messageBuilder(),
+                message: message,
+                nextMessageInGroup: roundBorder,
+              )
+            : enlargeEmojis && hideBackgroundOnEmojiMessages
+                ? _messageBuilder()
+                : Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: borderRadius,
+                      color: !currentUserIsAuthor ||
+                              message.type == types.MessageType.image
+                          ? InheritedChatTheme.of(context).theme.secondaryColor
+                          : InheritedChatTheme.of(context).theme.primaryColor,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: borderRadius,
+                      child: _messageBuilder(),
+                    ),
                   ),
-                ),
-              );
+        const SizedBox(height: 2,),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              messageTime(
+                DateTime.fromMillisecondsSinceEpoch(message.createdAt!),
+                dateLocale: dateLocale,
+                timeFormat: timeFormat,
+              ),
+              textAlign: TextAlign.end,
+              style: InheritedChatTheme.of(context).theme.messageTimeTextStyle,
+            ),
+            const SizedBox(width: 8,),
+          ],
+        ),
+        const SizedBox(height: 2,),
+      ],
+    );
   }
 
   Widget _messageBuilder() {
@@ -306,12 +313,19 @@ class Message extends StatelessWidget {
   Widget _statusBuilder(BuildContext context, types.StatusType? latestStatus) {
     switch (latestStatus) {
       case types.StatusType.delivered:
-      case types.StatusType.sent:
         return InheritedChatTheme.of(context).theme.deliveredIcon != null
             ? InheritedChatTheme.of(context).theme.deliveredIcon!
             : Image.asset(
                 'assets/icon-delivered.png',
-                color: InheritedChatTheme.of(context).theme.primaryColor,
+                color: InheritedChatTheme.of(context).theme.deliveredMessageIconColor,
+                package: 'flutter_chat_ui',
+              );
+      case types.StatusType.sent:
+        return InheritedChatTheme.of(context).theme.sentIcon != null
+            ? InheritedChatTheme.of(context).theme.sentIcon!
+            : Image.asset(
+                'assets/icon-delivered.png',
+                color: InheritedChatTheme.of(context).theme.sentMessageIconColor,
                 package: 'flutter_chat_ui',
               );
       case types.StatusType.error:
@@ -327,7 +341,7 @@ class Message extends StatelessWidget {
             ? InheritedChatTheme.of(context).theme.seenIcon!
             : Image.asset(
                 'assets/icon-seen.png',
-                color: InheritedChatTheme.of(context).theme.primaryColor,
+                color: InheritedChatTheme.of(context).theme.seenMessageIconColor,
                 package: 'flutter_chat_ui',
               );
       case types.StatusType.sending:
@@ -341,7 +355,7 @@ class Message extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     strokeWidth: 1.5,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      InheritedChatTheme.of(context).theme.primaryColor,
+                      InheritedChatTheme.of(context).theme.sendingMessageIconColor!,
                     ),
                   ),
                 ),
