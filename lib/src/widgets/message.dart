@@ -189,9 +189,9 @@ class Message extends StatelessWidget {
     bool enlargeEmojis,
   ) {
     return Column(
-        crossAxisAlignment: currentUserIsAuthor
-            ? CrossAxisAlignment.end
-            : CrossAxisAlignment.start,
+      crossAxisAlignment: currentUserIsAuthor
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
       children: [
         bubbleBuilder != null
             ? bubbleBuilder!(
@@ -216,25 +216,33 @@ class Message extends StatelessWidget {
                       child: _messageBuilder(),
                     ),
                   ),
-        const SizedBox(height: 2,),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              messageTime(
-                DateTime.fromMillisecondsSinceEpoch(message.createdAt!),
-                dateLocale: dateLocale,
-                timeFormat: timeFormat,
-              ),
-              textAlign: TextAlign.end,
-              style: InheritedChatTheme.of(context).theme.messageTimeTextStyle,
-            ),
-            const SizedBox(width: 8,),
-          ],
+        const SizedBox(
+          height: 2,
         ),
-        const SizedBox(height: 2,),
+        if (message.createdAt != null)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                messageTime(
+                  DateTime.fromMillisecondsSinceEpoch(message.createdAt!),
+                  dateLocale: dateLocale,
+                  timeFormat: timeFormat,
+                ),
+                textAlign: TextAlign.end,
+                style:
+                    InheritedChatTheme.of(context).theme.messageTimeTextStyle,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+            ],
+          ),
+        const SizedBox(
+          height: 2,
+        ),
       ],
     );
   }
@@ -317,7 +325,9 @@ class Message extends StatelessWidget {
             ? InheritedChatTheme.of(context).theme.deliveredIcon!
             : Image.asset(
                 'assets/icon-delivered.png',
-                color: InheritedChatTheme.of(context).theme.deliveredMessageIconColor,
+                color: InheritedChatTheme.of(context)
+                    .theme
+                    .deliveredMessageIconColor,
                 package: 'flutter_chat_ui',
               );
       case types.StatusType.sent:
@@ -325,7 +335,8 @@ class Message extends StatelessWidget {
             ? InheritedChatTheme.of(context).theme.sentIcon!
             : Image.asset(
                 'assets/icon-delivered.png',
-                color: InheritedChatTheme.of(context).theme.sentMessageIconColor,
+                color:
+                    InheritedChatTheme.of(context).theme.sentMessageIconColor,
                 package: 'flutter_chat_ui',
               );
       case types.StatusType.error:
@@ -341,7 +352,8 @@ class Message extends StatelessWidget {
             ? InheritedChatTheme.of(context).theme.seenIcon!
             : Image.asset(
                 'assets/icon-seen.png',
-                color: InheritedChatTheme.of(context).theme.seenMessageIconColor,
+                color:
+                    InheritedChatTheme.of(context).theme.seenMessageIconColor,
                 package: 'flutter_chat_ui',
               );
       case types.StatusType.sending:
@@ -355,7 +367,9 @@ class Message extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     strokeWidth: 1.5,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      InheritedChatTheme.of(context).theme.sendingMessageIconColor!,
+                      InheritedChatTheme.of(context)
+                          .theme
+                          .sendingMessageIconColor!,
                     ),
                   ),
                 ),
