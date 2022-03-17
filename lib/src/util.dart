@@ -204,15 +204,15 @@ List<Object> calculateChatMessages(
       'showStatus': true,
     });
 
-    if (!nextMessageInGroup) {
-      chatMessages.insert(
-        0,
-        MessageSpacer(
-          height: 12,
-          id: message.id,
-        ),
-      );
-    }
+    // if (!nextMessageInGroup) {
+    //   chatMessages.insert(
+    //     0,
+    //     MessageSpacer(
+    //       height: 12,
+    //       id: message.id,
+    //     ),
+    //   );
+    // }
 
     if (nextMessageDifferentDay || nextMessageDateThreshold) {
       chatMessages.insert(
