@@ -195,6 +195,7 @@ class _ChatPageState extends State<ChatPage> {
           onPreviewDataFetched: _handlePreviewDataFetched,
           onSendPressed: _handleSendPressed,
           user: _user,
+          room: const types.Room(id: 'roomIdrandom', requestedBy: 'id', type: types.RoomType.direct, users: []),
           theme: const DefaultChatTheme(
             messageBorderRadius: 8,
             messageInsetsHorizontal: 4,

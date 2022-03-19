@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/src/widgets/inherited_l10n.dart';
+import 'package:flutter_chat_ui/src/widgets/inherited_room.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -71,6 +72,7 @@ class Chat extends StatefulWidget {
     this.timeFormat,
     this.usePreviewData = true,
     required this.user,
+    required this.room,
   }) : super(key: key);
 
   /// See [Message.bubbleBuilder]
@@ -245,6 +247,9 @@ class Chat extends StatefulWidget {
   /// See [InheritedUser.user]
   final types.User user;
 
+  /// See [InheritedRoom.room]
+  final types.Room room;
+
   @override
   _ChatState createState() => _ChatState();
 }
@@ -354,7 +359,7 @@ class _ChatState extends State<Chat> {
       return Align(
         alignment: Alignment.center,
         child: Container(
-          padding:  const EdgeInsets.fromLTRB(8, 4, 8, 4),
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
           decoration: BoxDecoration(
             color: const Color(0xFF898989).withOpacity(0.2),
             borderRadius: BorderRadius.circular(16.0),
@@ -419,7 +424,6 @@ class _ChatState extends State<Chat> {
         dateFormat: widget.dateFormat,
         dateLocale: widget.dateLocale,
         timeFormat: widget.timeFormat,
-
       );
     }
   }
@@ -454,59 +458,86 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    return InheritedUser(
-      user: widget.user,
-      child: InheritedChatTheme(
-        theme: widget.theme,
-        child: InheritedL10n(
-          l10n: widget.l10n,
-          child: Stack(
-            children: [
-              Container(
-                color: widget.theme.backgroundColor,
-                child: Column(
-                  children: [
-                    Flexible(
-                      child: widget.messages.isEmpty
-                          ? SizedBox.expand(
-                              child: _emptyStateBuilder(),
-                            )
-                          : GestureDetector(
-                              onTap: () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                widget.onBackgroundTap?.call();
-                              },
-                              child: LayoutBuilder(
-                                builder: (BuildContext context,
-                                        BoxConstraints constraints) =>
-                                    ChatList(
-                                  isLastPage: widget.isLastPage,
-                                  itemBuilder: (item, index) =>
-                                      _messageBuilder(item, constraints),
-                                  items: _chatMessages,
-                                  onEndReached: widget.onEndReached,
-                                  onEndReachedThreshold:
-                                      widget.onEndReachedThreshold,
-                                  scrollPhysics: widget.scrollPhysics,
+    return InheritedRoom(
+      room: widget.room,
+      child: InheritedUser(
+        user: widget.user,
+        child: InheritedChatTheme(
+          theme: widget.theme,
+          child: InheritedL10n(
+            l10n: widget.l10n,
+            child: Stack(
+              children: [
+                Container(
+                  color: widget.theme.backgroundColor,
+                  child: Column(
+                    children: [
+                      Flexible(
+                        child: widget.messages.isEmpty
+                            ? SizedBox.expand(
+                                child: _emptyStateBuilder(),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  widget.onBackgroundTap?.call();
+                                },
+                                child: LayoutBuilder(
+                                  builder: (BuildContext context,
+                                          BoxConstraints constraints) =>
+                                      ChatList(
+                                    isLastPage: widget.isLastPage,
+                                    itemBuilder: (item, index) =>
+                                        _messageBuilder(item, constraints),
+                                    items: _chatMessages,
+                                    onEndReached: widget.onEndReached,
+                                    onEndReachedThreshold:
+                                        widget.onEndReachedThreshold,
+                                    scrollPhysics: widget.scrollPhysics,
+                                  ),
                                 ),
                               ),
+                      ),
+                      if (widget.room.status == types.RoomStatus.accept) ...[
+                        widget.customBottomWidget ??
+                            Input(
+                              isAttachmentUploading:
+                                  widget.isAttachmentUploading,
+                              onAttachmentPressed: widget.onAttachmentPressed,
+                              onSendPressed: widget.onSendPressed,
+                              onTextChanged: widget.onTextChanged,
+                              onTextFieldTap: widget.onTextFieldTap,
+                              sendButtonVisibilityMode:
+                                  widget.sendButtonVisibilityMode,
                             ),
-                    ),
-                    widget.customBottomWidget ??
-                        Input(
-                          isAttachmentUploading: widget.isAttachmentUploading,
-                          onAttachmentPressed: widget.onAttachmentPressed,
-                          onSendPressed: widget.onSendPressed,
-                          onTextChanged: widget.onTextChanged,
-                          onTextFieldTap: widget.onTextFieldTap,
-                          sendButtonVisibilityMode:
-                              widget.sendButtonVisibilityMode,
-                        ),
-                  ],
+                      ] else if (widget.room.status ==
+                          types.RoomStatus.pending) ...[
+                        widget.user.id != widget.room.requestedBy
+                            ? Row(
+                                children: const [
+                                  Text('accept'),
+                                  Text('reject'),
+                                ],
+                              )
+                            : const Text('cancel request'),
+                      ] else if (widget.room.status ==
+                          types.RoomStatus.reject) ...[
+                        // if any user rejects the request do nothing
+                        widget.user.id != widget.room.requestedBy
+                            ? const Text('Your have rejected request.')
+                            : const Text('Your request got rejected'),
+                      ] else if (widget.room.status ==
+                          types.RoomStatus.block) ...[
+                        widget.user.id != widget.room.roomStatusChangedBy
+                            ? const Text('Other person blocked you for chat')
+                            : const Text('You have blocked chat'),
+                      ]
+                    ],
+                  ),
                 ),
-              ),
-              if (_isImageViewVisible) _imageGalleryBuilder(),
-            ],
+                if (_isImageViewVisible) _imageGalleryBuilder(),
+              ],
+            ),
           ),
         ),
       ),
