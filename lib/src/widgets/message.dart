@@ -209,7 +209,8 @@ class Message extends StatelessWidget {
                       color: !currentUserIsAuthor ||
                               message.type == types.MessageType.image
                           ? InheritedChatTheme.of(context).theme.secondaryColor
-                          : InheritedChatTheme.of(context).theme.primaryColor,
+                          : null,
+                          // : InheritedChatTheme.of(context).theme.primaryColor,
                     ),
                     child: ClipRRect(
                       borderRadius: borderRadius,
