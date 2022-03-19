@@ -20,9 +20,6 @@ dependencies:
 #  flutter_link_previewer: ^2.6.3
   flutter_link_previewer:
     git: https://github.com/Pareshoct7/flutter_link_previewer.git
-#  flutter_chat_types: ^3.3.1
-  flutter_chat_types:
-    git: https://github.com/Pareshoct7/flutter_chat_types.git
   photo_view:
     git: https://github.com/bluefireteam/photo_view.git
   visibility_detector: ^0.2.2
