@@ -24,7 +24,7 @@ class FileMessage extends StatelessWidget {
         : InheritedChatTheme.of(context).theme.receivedMessageDocumentIconColor;
 
     return Semantics(
-      label: InheritedL10n.of(context).l10n.fileButtonAccessibilityLabel,
+      label: InheritedL10n.of(context).chatStrings.fileButtonAccessibilityLabel,
       child: Container(
         padding: EdgeInsets.fromLTRB(
           InheritedChatTheme.of(context).theme.messageInsetsVertical,

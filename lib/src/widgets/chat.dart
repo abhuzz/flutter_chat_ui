@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/src/chat_strings.dart';
 import 'package:flutter_chat_ui/src/widgets/inherited_l10n.dart';
 import 'package:flutter_chat_ui/src/widgets/inherited_room.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-import '../chat_l10n.dart';
 import '../chat_theme.dart';
 import '../conditional/conditional.dart';
 import '../models/date_header.dart';
@@ -44,7 +44,7 @@ class Chat extends StatefulWidget {
     this.imageMessageBuilder,
     this.isAttachmentUploading,
     this.isLastPage,
-    this.l10n = const ChatL10nEn(),
+    this.chatStrings = const ChatStrings(),
     required this.messages,
     required this.messageStatus,
     this.onAttachmentPressed,
@@ -73,6 +73,13 @@ class Chat extends StatefulWidget {
     this.usePreviewData = true,
     required this.user,
     required this.room,
+    this.privacyEnabled = false,
+    this.onAcceptTap,
+    this.onRejectTap,
+    this.onCancelChatRequestTap,
+    this.onSendChatRequestTap,
+    this.onBlockTap,
+    this.onUnBlockTap,
   }) : super(key: key);
 
   /// See [Message.bubbleBuilder]
@@ -150,10 +157,8 @@ class Chat extends StatefulWidget {
   /// See [ChatList.isLastPage]
   final bool? isLastPage;
 
-  /// Localized copy. Extend [ChatL10n] class to create your own copy or use
-  /// existing one, like the default [ChatL10nEn]. You can customize only
-  /// certain properties, see more here [ChatL10nEn].
-  final ChatL10n l10n;
+  /// Localization
+  final ChatStrings chatStrings;
 
   /// List of [types.Message] to render in the chat widget
   final List<types.Message> messages;
@@ -209,6 +214,24 @@ class Chat extends StatefulWidget {
   /// See [Input.onTextFieldTap]
   final void Function()? onTextFieldTap;
 
+  /// Accept button click
+  final void Function()? onAcceptTap;
+
+  /// Reject button click
+  final void Function()? onRejectTap;
+
+  /// Cancel button click
+  final void Function()? onCancelChatRequestTap;
+
+  /// To send chat request button click
+  final void Function()? onSendChatRequestTap;
+
+  /// Block button click
+  final void Function()? onBlockTap;
+
+  /// UnBlock button click
+  final void Function()? onUnBlockTap;
+
   /// See [ChatList.scrollPhysics]
   final ScrollPhysics? scrollPhysics;
 
@@ -249,6 +272,9 @@ class Chat extends StatefulWidget {
 
   /// See [InheritedRoom.room]
   final types.Room room;
+
+  /// this will allow chat with privacy feature
+  final privacyEnabled;
 
   @override
   _ChatState createState() => _ChatState();
@@ -298,7 +324,7 @@ class _ChatState extends State<Chat> {
             horizontal: 24,
           ),
           child: Text(
-            widget.l10n.emptyChatPlaceholder,
+            widget.chatStrings.emptyChatPlaceholder,
             style: widget.theme.emptyChatPlaceholderTextStyle,
             textAlign: TextAlign.center,
           ),
@@ -465,7 +491,7 @@ class _ChatState extends State<Chat> {
         child: InheritedChatTheme(
           theme: widget.theme,
           child: InheritedL10n(
-            l10n: widget.l10n,
+            chatStrings: widget.chatStrings,
             child: Stack(
               children: [
                 Container(
@@ -498,7 +524,10 @@ class _ChatState extends State<Chat> {
                                 ),
                               ),
                       ),
-                      if (widget.room.status == types.RoomStatus.accept) ...[
+                      if (!widget.privacyEnabled ||
+                          (widget.privacyEnabled &&
+                              widget.room.status ==
+                                  types.RoomStatus.accept)) ...[
                         widget.customBottomWidget ??
                             Input(
                               isAttachmentUploading:
@@ -510,27 +539,163 @@ class _ChatState extends State<Chat> {
                               sendButtonVisibilityMode:
                                   widget.sendButtonVisibilityMode,
                             ),
-                      ] else if (widget.room.status ==
-                          types.RoomStatus.pending) ...[
-                        widget.user.id != widget.room.requestedBy
-                            ? Row(
-                                children: const [
-                                  Text('accept'),
-                                  Text('reject'),
+                      ] else if (widget.privacyEnabled &&
+                          widget.room.status == types.RoomStatus.pending) ...[
+                        if (widget.user.id != widget.room.requestedBy)
+                          Column(
+                            children: [
+                              Padding(
+                                padding: widget.theme.privacyTitlePadding,
+                                child: Text(
+                                    widget.chatStrings.pendingTitleForOtherUser,
+                                    style: widget.theme.privacyTitleTextStyle),
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                        onPressed: widget.onAcceptTap,
+                                        style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.zero)),
+                                            backgroundColor:
+                                                widget.theme.acceptButtonColor),
+                                        child: Text(
+                                          widget.chatStrings.acceptButtonText,
+                                          style: widget
+                                              .theme.privacyButtonTextStyle,
+                                        )),
+                                  ),
+                                  Expanded(
+                                    child: TextButton(
+                                        onPressed: widget.onRejectTap,
+                                        style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.zero)),
+                                            backgroundColor:
+                                                widget.theme.rejectButtonColor),
+                                        child: Text(widget.chatStrings.rejectButtonText,
+                                            style: widget
+                                                .theme.privacyButtonTextStyle)),
+                                  ),
+                                  Expanded(
+                                    child: TextButton(
+                                        onPressed: widget.onBlockTap,
+                                        style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap,
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.zero)),
+                                            backgroundColor:
+                                                widget.theme.blockButtonColor),
+                                        child: Text(widget.chatStrings.blockButtonText,
+                                            style: widget
+                                                .theme.privacyButtonTextStyle)),
+                                  )
                                 ],
-                              )
-                            : const Text('cancel request'),
-                      ] else if (widget.room.status ==
-                          types.RoomStatus.reject) ...[
+                              ),
+                            ],
+                          )
+                        else
+                          Column(
+                            children: [
+                              Padding(
+                                padding: widget.theme.privacyTitlePadding,
+                                child: Text(
+                                    widget.chatStrings.pendingTitleForMe,
+                                    style: widget.theme.privacyTitleTextStyle),
+                              ),
+                              TextButton(
+                                  onPressed: widget.onCancelChatRequestTap,
+                                  style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.all(Radius.zero)),
+                                      backgroundColor:
+                                          widget.theme.cancelButtonColor),
+                                  child: Text(widget.chatStrings.cancelRequestButtonText,
+                                      style: widget.theme.privacyButtonTextStyle)),
+                            ],
+                          ),
+                      ] else if (widget.privacyEnabled &&
+                          widget.room.status == types.RoomStatus.reject) ...[
                         // if any user rejects the request do nothing
                         widget.user.id != widget.room.requestedBy
-                            ? const Text('Your have rejected request.')
-                            : const Text('Your request got rejected'),
-                      ] else if (widget.room.status ==
-                          types.RoomStatus.block) ...[
+                            ? Column(
+                                children: [
+                                  Padding(
+                                    padding: widget.theme.privacyTitlePadding,
+                                    child: Text(widget.chatStrings.rejectTitleForOtherUser,
+                                        style:
+                                            widget.theme.privacyTitleTextStyle),
+                                  ),
+                                  TextButton(
+                                      onPressed: widget.onSendChatRequestTap,
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: widget
+                                              .theme.sendRequestButtonColor),
+                                      child: Text(widget.chatStrings.sendRequestButtonText,
+                                          style: widget
+                                              .theme.privacyButtonTextStyle))
+                                ],
+                              )
+                            : Column(
+                                children: [
+                                  Padding(
+                                    padding: widget.theme.privacyTitlePadding,
+                                    child: Text(widget.chatStrings.rejectTitleForMe,
+                                        style:
+                                            widget.theme.privacyTitleTextStyle),
+                                  ),
+                                  TextButton(
+                                      onPressed: widget.onSendChatRequestTap,
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: widget
+                                              .theme.sendRequestButtonColor),
+                                      child: Text(widget.chatStrings.sendRequestButtonText,
+                                          style: widget
+                                              .theme.privacyButtonTextStyle))
+                                ],
+                              ),
+                      ] else if (widget.privacyEnabled &&
+                          widget.room.status == types.RoomStatus.block) ...[
                         widget.user.id != widget.room.roomStatusChangedBy
-                            ? const Text('Other person blocked you for chat')
-                            : const Text('You have blocked chat'),
+                            ? Padding(
+                                padding: widget.theme.privacyTitlePadding,
+                                child: Text(widget.chatStrings.blockTitleForOtherUser,
+                                    style: widget.theme.privacyTitleTextStyle),
+                              )
+                            : Column(
+                                children: [
+                                  Padding(
+                                    padding: widget.theme.privacyTitlePadding,
+                                    child: Text(widget.chatStrings.blockTitleForMe,
+                                        style:
+                                            widget.theme.privacyTitleTextStyle),
+                                  ),
+                                  TextButton(
+                                      onPressed: widget.onUnBlockTap,
+                                      style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              widget.theme.unBlockButtonColor),
+                                      child: Text(widget.chatStrings.unBlockButtonText,
+                                          style: widget
+                                              .theme.privacyButtonTextStyle))
+                                ],
+                              ),
                       ]
                     ],
                   ),

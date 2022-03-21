@@ -1,6 +1,6 @@
 library flutter_chat_ui;
 
-export 'src/chat_l10n.dart';
+export 'src/chat_strings.dart';
 export 'src/chat_theme.dart';
 export 'src/models/emoji_enlargement_behavior.dart';
 export 'src/models/send_button_visibility_mode.dart';

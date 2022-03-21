@@ -101,6 +101,15 @@ abstract class ChatTheme {
     this.seenMessageIconColor,
     this.sentMessageIconColor,
     this.sendingMessageIconColor,
+    this.acceptButtonColor,
+    this.rejectButtonColor,
+    this.blockButtonColor,
+    this.unBlockButtonColor,
+    this.cancelButtonColor,
+    this.sendRequestButtonColor,
+    required this.privacyButtonTextStyle,
+    required this.privacyTitleTextStyle,
+    required this.privacyTitlePadding,
   });
 
   /// Icon for select attachment button
@@ -180,6 +189,22 @@ abstract class ChatTheme {
   final Color? sentMessageIconColor;
   final Color? seenMessageIconColor;
   final Color? sendingMessageIconColor;
+
+  final Color? acceptButtonColor;
+  final Color? rejectButtonColor;
+  final Color? blockButtonColor;
+  final Color? unBlockButtonColor;
+  final Color? cancelButtonColor;
+  final Color? sendRequestButtonColor;
+
+  /// showing style inside button
+  final TextStyle privacyButtonTextStyle;
+
+  /// style for title of the privacy input button actions
+  final TextStyle privacyTitleTextStyle;
+
+  /// Padding around title text for privacy input button actions
+  final EdgeInsetsGeometry privacyTitlePadding;
 
   /// Text style used for displaying emojis on text messages
   final TextStyle receivedEmojiMessageTextStyle;
@@ -403,6 +428,19 @@ class DefaultChatTheme extends ChatTheme {
     seenMessageIconColor = const Color(0xFF898989),
     sentMessageIconColor = const Color(0xFF898989),
     sendingMessageIconColor = const Color(0xFF898989),
+    acceptButtonColor = const Color(0xFF898989),
+    rejectButtonColor = const Color(0xFF898989),
+    blockButtonColor = const Color(0xFF898989),
+    unBlockButtonColor = const Color(0xFF898989),
+    cancelButtonColor = const Color(0xFF898989),
+    sendRequestButtonColor = const Color(0xFF898989),
+    TextStyle privacyButtonTextStyle = const TextStyle(
+      color: neutral7,
+    ),
+    TextStyle privacyTitleTextStyle = const TextStyle(
+      color: neutral0,
+    ),
+    EdgeInsetsGeometry privacyTitlePadding = const EdgeInsets.all(16),
   }) : super(
           attachmentButtonIcon: attachmentButtonIcon,
           backgroundColor: backgroundColor,
@@ -458,6 +496,15 @@ class DefaultChatTheme extends ChatTheme {
           userAvatarNameColors: userAvatarNameColors,
           userAvatarTextStyle: userAvatarTextStyle,
           userNameTextStyle: userNameTextStyle,
+          acceptButtonColor: acceptButtonColor,
+          rejectButtonColor: rejectButtonColor,
+          blockButtonColor: blockButtonColor,
+          unBlockButtonColor: unBlockButtonColor,
+          cancelButtonColor: cancelButtonColor,
+          sendRequestButtonColor: sendRequestButtonColor,
+          privacyButtonTextStyle: privacyButtonTextStyle,
+          privacyTitleTextStyle: privacyTitleTextStyle,
+          privacyTitlePadding: privacyTitlePadding,
         );
 }
 
@@ -597,6 +644,19 @@ class DarkChatTheme extends ChatTheme {
       fontWeight: FontWeight.w800,
       height: 1.333,
     ),
+    acceptButtonColor = const Color(0xFF898989),
+    rejectButtonColor = const Color(0xFF898989),
+    blockButtonColor = const Color(0xFF898989),
+    unBlockButtonColor = const Color(0xFF898989),
+    cancelButtonColor = const Color(0xFF898989),
+    sendRequestButtonColor = const Color(0xFF898989),
+    TextStyle privacyButtonTextStyle = const TextStyle(
+      color: neutral7,
+    ),
+    TextStyle privacyTitleTextStyle = const TextStyle(
+      color: neutral0,
+    ),
+    EdgeInsetsGeometry privacyTitlePadding = const EdgeInsets.all(16),
   }) : super(
           attachmentButtonIcon: attachmentButtonIcon,
           backgroundColor: backgroundColor,
@@ -652,5 +712,14 @@ class DarkChatTheme extends ChatTheme {
           userAvatarNameColors: userAvatarNameColors,
           userAvatarTextStyle: userAvatarTextStyle,
           userNameTextStyle: userNameTextStyle,
+          acceptButtonColor: acceptButtonColor,
+          rejectButtonColor: rejectButtonColor,
+          blockButtonColor: blockButtonColor,
+          unBlockButtonColor: unBlockButtonColor,
+          cancelButtonColor: cancelButtonColor,
+          sendRequestButtonColor: sendRequestButtonColor,
+          privacyButtonTextStyle: privacyButtonTextStyle,
+          privacyTitleTextStyle: privacyTitleTextStyle,
+          privacyTitlePadding: privacyTitlePadding,
         );
 }

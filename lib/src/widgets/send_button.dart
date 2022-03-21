@@ -29,7 +29,7 @@ class SendButton extends StatelessWidget {
             ),
         onPressed: onPressed,
         padding: EdgeInsets.zero,
-        tooltip: InheritedL10n.of(context).l10n.sendButtonAccessibilityLabel,
+        tooltip: InheritedL10n.of(context).chatStrings.sendButtonAccessibilityLabel,
       ),
     );
   }

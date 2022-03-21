@@ -156,7 +156,7 @@ class _InputState extends State<Input> {
                                     .withOpacity(0.5),
                               ),
                           hintText:
-                              InheritedL10n.of(context).l10n.inputPlaceholder,
+                              InheritedL10n.of(context).chatStrings.inputPlaceholder,
                         ),
                     focusNode: _inputFocusNode,
                     keyboardType: TextInputType.multiline,

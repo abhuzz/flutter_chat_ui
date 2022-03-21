@@ -30,7 +30,7 @@ class AttachmentButton extends StatelessWidget {
         onPressed: onPressed,
         padding: EdgeInsets.zero,
         tooltip:
-            InheritedL10n.of(context).l10n.attachmentButtonAccessibilityLabel,
+            InheritedL10n.of(context).chatStrings.attachmentButtonAccessibilityLabel,
       ),
     );
   }

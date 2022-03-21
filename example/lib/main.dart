@@ -195,11 +195,44 @@ class _ChatPageState extends State<ChatPage> {
           onPreviewDataFetched: _handlePreviewDataFetched,
           onSendPressed: _handleSendPressed,
           user: _user,
-          room: const types.Room(id: 'roomIdrandom', requestedBy: 'id', type: types.RoomType.direct, users: []),
+          room: const types.Room(id: 'roomIdrandom', requestedBy: 'id', type: types.RoomType.direct, users: [], status: types.RoomStatus.pending),
+          chatStrings: const ChatStrings(
+            pendingTitleForOtherUser: 'Someone requested you to start chat'
+          ),
+          onAcceptTap: (){
+            debugPrint('Chat request Accepted');
+          },
+          onRejectTap: (){
+            debugPrint('Chat request Rejected');
+          },
+          onBlockTap: (){
+            debugPrint('Chat request Blocked');
+          },
+          onSendChatRequestTap: (){
+            debugPrint('sending chat request..');
+          },
+          onCancelChatRequestTap: (){
+            debugPrint('cancel chat request..');
+          },
+          privacyEnabled: true,
           theme: const DefaultChatTheme(
             messageBorderRadius: 8,
             messageInsetsHorizontal: 4,
             messageInsetsVertical: 2,
+            acceptButtonColor: Colors.green,
+            blockButtonColor: Colors.red,
+            rejectButtonColor: Colors.black,
+            cancelButtonColor: Colors.cyan,
+            sendRequestButtonColor: Colors.green,
+            unBlockButtonColor: Colors.grey,
+            privacyButtonTextStyle: TextStyle(
+              color: Colors.white,
+            ),
+            privacyTitlePadding: EdgeInsets.all(24),
+            privacyTitleTextStyle: TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.bold
+            ),
           ),
         ),
       ),
