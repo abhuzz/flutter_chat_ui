@@ -200,19 +200,19 @@ class _ChatPageState extends State<ChatPage> {
             pendingTitleForOtherUser: 'Someone requested you to start chat'
           ),
           onAcceptTap: (){
-            debugPrint('Chat request Accepted');
+            debugPrint('Accepting char request..');
           },
           onRejectTap: (){
-            debugPrint('Chat request Rejected');
+            debugPrint('Rejecting chat request..');
           },
           onBlockTap: (){
-            debugPrint('Chat request Blocked');
+            debugPrint('Blocking user for chat');
           },
           onSendChatRequestTap: (){
-            debugPrint('sending chat request..');
+            debugPrint('Sending chat request..');
           },
           onCancelChatRequestTap: (){
-            debugPrint('cancel chat request..');
+            debugPrint('Cancel chat request..');
           },
           privacyEnabled: true,
           theme: const DefaultChatTheme(
