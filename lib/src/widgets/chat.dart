@@ -598,9 +598,11 @@ class _ChatState extends State<Chat> {
                                                     Radius.zero)),
                                             backgroundColor:
                                                 widget.theme.blockButtonColor),
-                                        child: Text(widget.chatStrings.blockButtonText,
-                                            style: widget
-                                                .theme.privacyButtonTextStyle)),
+                                        child: SizedBox(
+                                          child: Text(widget.chatStrings.blockButtonText,
+                                              style: widget
+                                                  .theme.privacyButtonTextStyle),
+                                        )),
                                   )
                                 ],
                               ),
@@ -619,12 +621,14 @@ class _ChatState extends State<Chat> {
                                   onPressed: widget.onCancelChatRequestTap,
                                   style: TextButton.styleFrom(
                                       shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.zero)),
+                                          borderRadius: BorderRadius.all(Radius.circular(8))),
                                       backgroundColor:
                                           widget.theme.cancelButtonColor),
-                                  child: Text(widget.chatStrings.cancelRequestButtonText,
-                                      style: widget.theme.privacyButtonTextStyle)),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: Text(widget.chatStrings.cancelRequestButtonText,
+                                        style: widget.theme.privacyButtonTextStyle),
+                                  )),
                             ],
                           ),
                       ] else if (widget.privacyEnabled &&
@@ -643,13 +647,15 @@ class _ChatState extends State<Chat> {
                                       onPressed: widget.onSendChatRequestTap,
                                       style: TextButton.styleFrom(
                                           shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.zero)),
+                                              borderRadius: BorderRadius.all(Radius.circular(8))),
                                           backgroundColor: widget
                                               .theme.sendRequestButtonColor),
-                                      child: Text(widget.chatStrings.sendRequestButtonText,
-                                          style: widget
-                                              .theme.privacyButtonTextStyle))
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Text(widget.chatStrings.sendRequestButtonText,
+                                            style: widget
+                                                .theme.privacyButtonTextStyle),
+                                      ))
                                 ],
                               )
                             : Column(
@@ -664,13 +670,15 @@ class _ChatState extends State<Chat> {
                                       onPressed: widget.onSendChatRequestTap,
                                       style: TextButton.styleFrom(
                                           shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.zero)),
+                                              borderRadius: BorderRadius.all(Radius.circular(8))),
                                           backgroundColor: widget
                                               .theme.sendRequestButtonColor),
-                                      child: Text(widget.chatStrings.sendRequestButtonText,
-                                          style: widget
-                                              .theme.privacyButtonTextStyle))
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Text(widget.chatStrings.sendRequestButtonText,
+                                            style: widget
+                                                .theme.privacyButtonTextStyle),
+                                      ))
                                 ],
                               ),
                       ] else if (widget.privacyEnabled &&
@@ -693,13 +701,15 @@ class _ChatState extends State<Chat> {
                                       onPressed: widget.onUnBlockTap,
                                       style: TextButton.styleFrom(
                                           shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.zero)),
+                                              borderRadius: BorderRadius.all(Radius.circular(8))),
                                           backgroundColor:
                                               widget.theme.unBlockButtonColor),
-                                      child: Text(widget.chatStrings.unBlockButtonText,
-                                          style: widget
-                                              .theme.privacyButtonTextStyle))
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Text(widget.chatStrings.unBlockButtonText,
+                                            style: widget
+                                                .theme.privacyButtonTextStyle),
+                                      ))
                                 ],
                               ),
                       ] else if (widget.privacyEnabled &&
@@ -718,13 +728,15 @@ class _ChatState extends State<Chat> {
                                 onPressed: widget.onSendChatRequestTap,
                                 style: TextButton.styleFrom(
                                     shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.zero)),
+                                        borderRadius: BorderRadius.all(Radius.circular(8))),
                                     backgroundColor: widget
                                         .theme.sendRequestButtonColor),
-                                child: Text(widget.chatStrings.sendRequestButtonOnCancelText,
-                                    style: widget
-                                        .theme.privacyButtonTextStyle))
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: Text(widget.chatStrings.sendRequestButtonOnCancelText,
+                                      style: widget
+                                          .theme.privacyButtonTextStyle),
+                                ))
                           ],
                         )
                             : Column(
@@ -739,13 +751,15 @@ class _ChatState extends State<Chat> {
                                 onPressed: widget.onSendChatRequestTap,
                                 style: TextButton.styleFrom(
                                     shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.zero)),
+                                        borderRadius: BorderRadius.all(Radius.circular(8))),
                                     backgroundColor: widget
                                         .theme.sendRequestButtonColor),
-                                child: Text(widget.chatStrings.sendRequestButtonOnCancelText,
-                                    style: widget
-                                        .theme.privacyButtonTextStyle))
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: Text(widget.chatStrings.sendRequestButtonOnCancelText,
+                                      style: widget
+                                          .theme.privacyButtonTextStyle),
+                                ))
                           ],
                         ),
                       ]
