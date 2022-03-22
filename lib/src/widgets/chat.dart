@@ -618,12 +618,6 @@ class _ChatState extends State<Chat> {
                               TextButton(
                                   onPressed: widget.onCancelChatRequestTap,
                                   style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.all(Radius.zero)),
                                       backgroundColor:
                                           widget.theme.cancelButtonColor),
                                   child: Text(widget.chatStrings.cancelRequestButtonText,
