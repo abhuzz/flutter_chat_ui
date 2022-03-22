@@ -25,6 +25,10 @@ class ChatStrings {
     this.blockTitleForOtherUser = 'Other person blocked you for chat',
     this.blockTitleForMe = 'You have blocked chat',
     this.unBlockButtonText = 'UnBlock',
+
+    this.cancelTitleForOtherUser = 'To start chat send request',
+    this.cancelTitleForMe = 'You Have canceled chat request. Do you want to send back?',
+    this.sendRequestButtonOnCancelText = 'Request',
   });
 
   final String attachmentButtonAccessibilityLabel;
@@ -47,4 +51,8 @@ class ChatStrings {
   final String blockTitleForOtherUser;
   final String blockTitleForMe;
   final String unBlockButtonText;
+
+  final String cancelTitleForOtherUser;
+  final String cancelTitleForMe;
+  final String sendRequestButtonOnCancelText;
 }

@@ -702,6 +702,52 @@ class _ChatState extends State<Chat> {
                                               .theme.privacyButtonTextStyle))
                                 ],
                               ),
+                      ] else if (widget.privacyEnabled &&
+                          widget.room.status == types.RoomStatus.cancel) ...[
+                        // if any user rejects the request do nothing
+                        widget.user.id != widget.room.requestedBy
+                            ? Column(
+                          children: [
+                            Padding(
+                              padding: widget.theme.privacyTitlePadding,
+                              child: Text(widget.chatStrings.cancelTitleForOtherUser,
+                                  style:
+                                  widget.theme.privacyTitleTextStyle),
+                            ),
+                            TextButton(
+                                onPressed: widget.onSendChatRequestTap,
+                                style: TextButton.styleFrom(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.zero)),
+                                    backgroundColor: widget
+                                        .theme.sendRequestButtonColor),
+                                child: Text(widget.chatStrings.sendRequestButtonOnCancelText,
+                                    style: widget
+                                        .theme.privacyButtonTextStyle))
+                          ],
+                        )
+                            : Column(
+                          children: [
+                            Padding(
+                              padding: widget.theme.privacyTitlePadding,
+                              child: Text(widget.chatStrings.cancelTitleForMe,
+                                  style:
+                                  widget.theme.privacyTitleTextStyle),
+                            ),
+                            TextButton(
+                                onPressed: widget.onSendChatRequestTap,
+                                style: TextButton.styleFrom(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.zero)),
+                                    backgroundColor: widget
+                                        .theme.sendRequestButtonColor),
+                                child: Text(widget.chatStrings.sendRequestButtonOnCancelText,
+                                    style: widget
+                                        .theme.privacyButtonTextStyle))
+                          ],
+                        ),
                       ]
                     ],
                   ),
