@@ -618,6 +618,9 @@ class _ChatState extends State<Chat> {
                               TextButton(
                                   onPressed: widget.onCancelChatRequestTap,
                                   style: TextButton.styleFrom(
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.zero)),
                                       backgroundColor:
                                           widget.theme.cancelButtonColor),
                                   child: Text(widget.chatStrings.cancelRequestButtonText,
@@ -639,6 +642,9 @@ class _ChatState extends State<Chat> {
                                   TextButton(
                                       onPressed: widget.onSendChatRequestTap,
                                       style: TextButton.styleFrom(
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.zero)),
                                           backgroundColor: widget
                                               .theme.sendRequestButtonColor),
                                       child: Text(widget.chatStrings.sendRequestButtonText,
@@ -657,6 +663,9 @@ class _ChatState extends State<Chat> {
                                   TextButton(
                                       onPressed: widget.onSendChatRequestTap,
                                       style: TextButton.styleFrom(
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.zero)),
                                           backgroundColor: widget
                                               .theme.sendRequestButtonColor),
                                       child: Text(widget.chatStrings.sendRequestButtonText,
@@ -683,6 +692,9 @@ class _ChatState extends State<Chat> {
                                   TextButton(
                                       onPressed: widget.onUnBlockTap,
                                       style: TextButton.styleFrom(
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.zero)),
                                           backgroundColor:
                                               widget.theme.unBlockButtonColor),
                                       child: Text(widget.chatStrings.unBlockButtonText,
