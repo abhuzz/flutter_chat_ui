@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/src/chat_strings.dart';
@@ -582,7 +583,8 @@ class _ChatState extends State<Chat> {
                                                     Radius.zero)),
                                             backgroundColor:
                                                 widget.theme.rejectButtonColor),
-                                        child: Text(widget.chatStrings.rejectButtonText,
+                                        child: Text(
+                                            widget.chatStrings.rejectButtonText,
                                             style: widget
                                                 .theme.privacyButtonTextStyle)),
                                   ),
@@ -598,7 +600,8 @@ class _ChatState extends State<Chat> {
                                                     Radius.zero)),
                                             backgroundColor:
                                                 widget.theme.blockButtonColor),
-                                        child: Text(widget.chatStrings.blockButtonText,
+                                        child: Text(
+                                            widget.chatStrings.blockButtonText,
                                             style: widget
                                                 .theme.privacyButtonTextStyle)),
                                   )
@@ -621,14 +624,18 @@ class _ChatState extends State<Chat> {
                                     onPressed: widget.onCancelChatRequestTap,
                                     style: TextButton.styleFrom(
                                         shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8))),
                                         backgroundColor:
                                             widget.theme.cancelButtonColor),
                                     child: SizedBox(
                                       width: double.infinity,
                                       child: Center(
-                                        child: Text(widget.chatStrings.cancelRequestButtonText,
-                                            style: widget.theme.privacyButtonTextStyle),
+                                        child: Text(
+                                            widget.chatStrings
+                                                .cancelRequestButtonText,
+                                            style: widget
+                                                .theme.privacyButtonTextStyle),
                                       ),
                                     )),
                               ),
@@ -642,7 +649,9 @@ class _ChatState extends State<Chat> {
                                 children: [
                                   Padding(
                                     padding: widget.theme.privacyTitlePadding,
-                                    child: Text(widget.chatStrings.rejectTitleForOtherUser,
+                                    child: Text(
+                                        widget.chatStrings
+                                            .rejectTitleForOtherUser,
                                         style:
                                             widget.theme.privacyTitleTextStyle),
                                   ),
@@ -652,15 +661,18 @@ class _ChatState extends State<Chat> {
                                         onPressed: widget.onSendChatRequestTap,
                                         style: TextButton.styleFrom(
                                             shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(8))),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8))),
                                             backgroundColor: widget
                                                 .theme.sendRequestButtonColor),
                                         child: SizedBox(
                                           width: double.infinity,
                                           child: Center(
-                                            child: Text(widget.chatStrings.sendRequestButtonText,
-                                                style: widget
-                                                    .theme.privacyButtonTextStyle),
+                                            child: Text(
+                                                widget.chatStrings
+                                                    .sendRequestButtonText,
+                                                style: widget.theme
+                                                    .privacyButtonTextStyle),
                                           ),
                                         )),
                                   )
@@ -670,7 +682,8 @@ class _ChatState extends State<Chat> {
                                 children: [
                                   Padding(
                                     padding: widget.theme.privacyTitlePadding,
-                                    child: Text(widget.chatStrings.rejectTitleForMe,
+                                    child: Text(
+                                        widget.chatStrings.rejectTitleForMe,
                                         style:
                                             widget.theme.privacyTitleTextStyle),
                                   ),
@@ -680,116 +693,98 @@ class _ChatState extends State<Chat> {
                                         onPressed: widget.onSendChatRequestTap,
                                         style: TextButton.styleFrom(
                                             shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(8))),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8))),
                                             backgroundColor: widget
                                                 .theme.sendRequestButtonColor),
                                         child: SizedBox(
                                           width: double.infinity,
                                           child: Center(
-                                            child: Text(widget.chatStrings.sendRequestButtonText,
-                                                style: widget
-                                                    .theme.privacyButtonTextStyle),
+                                            child: Text(
+                                                widget.chatStrings
+                                                    .sendRequestButtonText,
+                                                style: widget.theme
+                                                    .privacyButtonTextStyle),
                                           ),
                                         )),
                                   )
                                 ],
                               ),
-                      ] else if (widget.privacyEnabled &&
-                          widget.room.status == types.RoomStatus.block) ...[
-                        widget.user.id != widget.room.roomStatusChangedBy
-                            ? Padding(
-                                padding: widget.theme.privacyTitlePadding,
-                                child: Text(widget.chatStrings.blockTitleForOtherUser,
-                                    style: widget.theme.privacyTitleTextStyle),
-                              )
-                            : Column(
-                                children: [
-                                  Padding(
-                                    padding: widget.theme.privacyTitlePadding,
-                                    child: Text(widget.chatStrings.blockTitleForMe,
-                                        style:
-                                            widget.theme.privacyTitleTextStyle),
-                                  ),
-                                  Padding(
-                                    padding: widget.theme.privacyTitlePadding,
-                                    child: TextButton(
-                                        onPressed: widget.onUnBlockTap,
-                                        style: TextButton.styleFrom(
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(8))),
-                                            backgroundColor:
-                                                widget.theme.unBlockButtonColor),
-                                        child: SizedBox(
-                                          width: double.infinity,
-                                          child: Center(
-                                            child: Text(widget.chatStrings.unBlockButtonText,
-                                                style: widget
-                                                    .theme.privacyButtonTextStyle),
-                                          ),
-                                        )),
-                                  )
-                                ],
-                              ),
+                        // ] else if (widget.privacyEnabled && widget.room.status == types.RoomStatus.block) ...[
                       ] else if (widget.privacyEnabled &&
                           widget.room.status == types.RoomStatus.cancel) ...[
                         // if any user rejects the request do nothing
                         widget.user.id != widget.room.requestedBy
                             ? Column(
-                          children: [
-                            Padding(
-                              padding: widget.theme.privacyTitlePadding,
-                              child: Text(widget.chatStrings.cancelTitleForOtherUser,
-                                  style:
-                                  widget.theme.privacyTitleTextStyle),
-                            ),
-                            Padding(
-                              padding: widget.theme.privacyTitlePadding,
-                              child: TextButton(
-                                  onPressed: widget.onSendChatRequestTap,
-                                  style: TextButton.styleFrom(
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                                      backgroundColor: widget
-                                          .theme.sendRequestButtonColor),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: Center(
-                                      child: Text(widget.chatStrings.sendRequestButtonOnCancelText,
-                                          style: widget
-                                              .theme.privacyButtonTextStyle),
-                                    ),
-                                  )),
-                            )
-                          ],
-                        )
+                                children: [
+                                  Padding(
+                                    padding: widget.theme.privacyTitlePadding,
+                                    child: Text(
+                                        widget.chatStrings
+                                            .cancelTitleForOtherUser,
+                                        style:
+                                            widget.theme.privacyTitleTextStyle),
+                                  ),
+                                  Padding(
+                                    padding: widget.theme.privacyTitlePadding,
+                                    child: TextButton(
+                                        onPressed: widget.onSendChatRequestTap,
+                                        style: TextButton.styleFrom(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8))),
+                                            backgroundColor: widget
+                                                .theme.sendRequestButtonColor),
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          child: Center(
+                                            child: Text(
+                                                widget.chatStrings
+                                                    .sendRequestButtonOnCancelText,
+                                                style: widget.theme
+                                                    .privacyButtonTextStyle),
+                                          ),
+                                        )),
+                                  )
+                                ],
+                              )
                             : Column(
-                          children: [
-                            Padding(
-                              padding: widget.theme.privacyTitlePadding,
-                              child: Text(widget.chatStrings.cancelTitleForMe,
-                                  style:
-                                  widget.theme.privacyTitleTextStyle),
-                            ),
-                            Padding(
-                              padding: widget.theme.privacyTitlePadding,
-                              child: TextButton(
-                                  onPressed: widget.onSendChatRequestTap,
-                                  style: TextButton.styleFrom(
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                                      backgroundColor: widget
-                                          .theme.sendRequestButtonColor),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: Center(
-                                      child: Text(widget.chatStrings.sendRequestButtonOnCancelText,
-                                          style: widget
-                                              .theme.privacyButtonTextStyle),
-                                    ),
-                                  )),
-                            )
-                          ],
-                        ),
+                                children: [
+                                  Padding(
+                                    padding: widget.theme.privacyTitlePadding,
+                                    child: Text(
+                                        widget.chatStrings.cancelTitleForMe,
+                                        style:
+                                            widget.theme.privacyTitleTextStyle),
+                                  ),
+                                  Padding(
+                                    padding: widget.theme.privacyTitlePadding,
+                                    child: TextButton(
+                                        onPressed: widget.onSendChatRequestTap,
+                                        style: TextButton.styleFrom(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8))),
+                                            backgroundColor: widget
+                                                .theme.sendRequestButtonColor),
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          child: Center(
+                                            child: Text(
+                                                widget.chatStrings
+                                                    .sendRequestButtonOnCancelText,
+                                                style: widget.theme
+                                                    .privacyButtonTextStyle),
+                                          ),
+                                        )),
+                                  ),
+                                ],
+                              ),
+                      ] else if (widget.privacyEnabled &&
+                          widget.room.type == types.RoomType.direct &&
+                          widget.room.blocks != null &&
+                          widget.room.blocks!.isNotEmpty) ...[
+                        block(),
                       ]
                     ],
                   ),
@@ -800,6 +795,87 @@ class _ChatState extends State<Chat> {
           ),
         ),
       ),
+    );
+  }
+
+  block() {
+    bool blockedMe = false;
+    bool blockedByMe = false;
+    types.Block? block = widget.room.blocks!
+        .firstWhereOrNull((e) => e.blockedTo == widget.user.id);
+    if (block != null) {
+      // someone blocked me
+      blockedMe = true;
+    }
+
+    block = widget.room.blocks!
+        .firstWhereOrNull((e) => e.blockedBy == widget.user.id);
+    if (block != null) {
+      // I blocked someone
+      blockedByMe = true;
+    }
+
+    return Column(
+      children: [
+        if (blockedMe && blockedByMe) ...[
+          Padding(
+            padding: widget.theme.privacyTitlePadding,
+            child: Text(widget.chatStrings.blockTitleForOtherUser,
+                style: widget.theme.privacyTitleTextStyle),
+          ),
+          Padding(
+            padding: widget.theme.privacyTitlePadding,
+            child: Text(widget.chatStrings.blockTitleForMe,
+                style: widget.theme.privacyTitleTextStyle),
+          ),
+          Padding(
+            padding: widget.theme.privacyTitlePadding,
+            child: TextButton(
+                onPressed: widget.onUnBlockTap,
+                style: TextButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    backgroundColor: widget.theme.unBlockButtonColor),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(widget.chatStrings.unBlockButtonText,
+                        style: widget.theme.privacyButtonTextStyle),
+                  ),
+                )),
+          ),
+        ] else if (blockedMe) ...[
+          Padding(
+            padding: widget.theme.privacyTitlePadding,
+            child: Text(widget.chatStrings.blockTitleForOtherUser,
+                style: widget.theme.privacyTitleTextStyle),
+          ),
+        ] else if (blockedByMe) ...[
+          Padding(
+            padding: widget.theme.privacyTitlePadding,
+            child: Text(widget.chatStrings.blockTitleForMe,
+                style: widget.theme.privacyTitleTextStyle),
+          ),
+          Padding(
+            padding: widget.theme.privacyTitlePadding,
+            child: TextButton(
+                onPressed: widget.onUnBlockTap,
+                style: TextButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    backgroundColor: widget.theme.unBlockButtonColor),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(widget.chatStrings.unBlockButtonText,
+                        style: widget.theme.privacyButtonTextStyle),
+                  ),
+                )),
+          ),
+        ] else ...[
+          const SizedBox(),
+        ]
+      ],
     );
   }
 }
