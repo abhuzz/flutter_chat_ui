@@ -798,21 +798,8 @@ class _ChatState extends State<Chat> {
   }
 
   block() {
-    if(widget.room.blocks == null || widget.room.blocks!.isEmpty){
-      return Padding(
-        padding: widget.theme.privacyTitlePadding,
-        child: TextButton(
-            onPressed: widget.onBlockTap,
-            style: TextButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8))),
-                backgroundColor:
-                widget.theme.blockButtonColor),
-            child: Text(
-                widget.chatStrings.blockButtonText,
-                style: widget
-                    .theme.privacyButtonTextStyle)),
-      );
+    if (widget.room.blocks == null || widget.room.blocks!.isEmpty) {
+      return const SizedBox();
     }
 
     bool blockedMe = false;
@@ -889,20 +876,21 @@ class _ChatState extends State<Chat> {
                 )),
           ),
         ] else ...[
-          Padding(
-            padding: widget.theme.privacyTitlePadding,
-            child: TextButton(
-                onPressed: widget.onBlockTap,
-                style: TextButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
-                    backgroundColor:
-                    widget.theme.blockButtonColor),
-                child: Text(
-                    widget.chatStrings.blockButtonText,
-                    style: widget
-                        .theme.privacyButtonTextStyle)),
-          ),
+          const SizedBox(),
+          // Padding(
+          //   padding: widget.theme.privacyTitlePadding,
+          //   child: TextButton(
+          //       onPressed: widget.onBlockTap,
+          //       style: TextButton.styleFrom(
+          //           shape: const RoundedRectangleBorder(
+          //               borderRadius: BorderRadius.all(Radius.circular(8))),
+          //           backgroundColor:
+          //           widget.theme.blockButtonColor),
+          //       child: Text(
+          //           widget.chatStrings.blockButtonText,
+          //           style: widget
+          //               .theme.privacyButtonTextStyle)),
+          // ),
         ]
       ],
     );
