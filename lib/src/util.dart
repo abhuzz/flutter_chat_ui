@@ -125,14 +125,22 @@ List<Object> calculateChatMessages(
   var shouldShowName = false;
 
   for (var i = messages.length - 1; i >= 0; i--) {
+
+    final message = messages[i];
+    final notMyMessage = message.author.id != user.id;
+
+    if(message.deleteType == types.MessageDeleteType.everyone){
+      continue;
+    }else if(!notMyMessage && message.deleteType == types.MessageDeleteType.me){
+      continue;
+    }
+
     final isFirst = i == messages.length - 1;
     final isLast = i == 0;
-    final message = messages[i];
     final messageHasCreatedAt = message.createdAt != null;
     final nextMessage = isLast ? null : messages[i - 1];
     final nextMessageHasCreatedAt = nextMessage?.createdAt != null;
     final nextMessageSameAuthor = message.author.id == nextMessage?.author.id;
-    final notMyMessage = message.author.id != user.id;
 
     var nextMessageDateThreshold = false;
     var nextMessageDifferentDay = false;
