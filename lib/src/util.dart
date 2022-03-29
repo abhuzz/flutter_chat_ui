@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:intl/intl.dart';
+
 import './models/date_header.dart';
 import './models/emoji_enlargement_behavior.dart';
 import './models/message_spacer.dart';
@@ -66,7 +68,8 @@ String getVerboseDateTimeRepresentation(
   return '$formattedDate, $formattedTime';
 }
 
-String messageTime(DateTime dateTime, {
+String messageTime(
+  DateTime dateTime, {
   String? dateLocale,
   DateFormat? timeFormat,
 }) {
@@ -124,17 +127,20 @@ List<Object> calculateChatMessages(
 
   var shouldShowName = false;
 
-  for (var i = messages.length - 1; i >= 0; i--) {
+  messages.removeWhere((message) {
+    final myMessage = message.author.id == user.id;
+    if (message.deleteType == types.MessageDeleteType.everyone) {
+      return true;
+    } else if (myMessage &&
+        message.deleteType == types.MessageDeleteType.me) {
+      return true;
+    }
+    return false;
+  });
 
+  for (var i = messages.length - 1; i >= 0; i--) {
     final message = messages[i];
     final notMyMessage = message.author.id != user.id;
-
-    if(message.deleteType == types.MessageDeleteType.everyone){
-      continue;
-    }else if(!notMyMessage && message.deleteType == types.MessageDeleteType.me){
-      continue;
-    }
-
     final isFirst = i == messages.length - 1;
     final isLast = i == 0;
     final messageHasCreatedAt = message.createdAt != null;
