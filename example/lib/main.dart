@@ -239,7 +239,7 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Stream<types.Status> allMessageStatus(types.Message message){
+  Stream<List<types.Status>> allMessageStatus(types.Message message){
     return const Stream.empty();
   }
 }

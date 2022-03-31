@@ -83,7 +83,7 @@ class Message extends StatelessWidget {
   /// Any message type
   final types.Message message;
 
-  final Stream<types.Status> Function(types.Message) messageStatus;
+  final Stream<List<types.Status>> Function(types.Message) messageStatus;
 
   /// returns message which populating in screen
   final Function(types.Message, types.StatusType?)? messageRendering;
@@ -449,7 +449,7 @@ class Message extends StatelessWidget {
               ],
             ),
           ),
-          if (_currentUserIsAuthor)
+          // if (_currentUserIsAuthor)
           Padding(
             padding: _currentUserIsAuthor
                 ? InheritedChatTheme.of(context).theme.statusIconPadding
@@ -459,34 +459,24 @@ class Message extends StatelessWidget {
                   onMessageStatusLongPress?.call(context, message),
               onTap: () => onMessageStatusTap?.call(context, message),
               // child: _statusBuilder(context),
-              child: StreamBuilder<types.Status>(
+              child: StreamBuilder<List<types.Status>>(
+                initialData: const [],
                 stream: messageStatus(message),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const SizedBox();
                   }
-
-                  // types.StatusType? latestStatus = calculateStatus(snapshot);
-                  //
-                  // if (messageRendering != null) {
-                  //   messageRendering!(message, latestStatus);
-                  // }
-                  //
-                  // if (!_currentUserIsAuthor || !showStatus) {
-                  //   return const SizedBox();
-                  // }
-                  //
-                  // return _statusBuilder(context, latestStatus);
+                  types.StatusType? latestStatus = calculateStatus(snapshot);
 
                   if (messageRendering != null) {
-                    messageRendering!(message, snapshot.data!.status);
+                    messageRendering!(message, latestStatus);
                   }
 
                   if (!_currentUserIsAuthor || !showStatus) {
                     return const SizedBox();
                   }
 
-                  return _statusBuilder(context, snapshot.data!.status);
+                  return _statusBuilder(context, latestStatus);
                 },
               ),
             ),

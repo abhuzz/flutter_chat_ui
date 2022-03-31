@@ -163,7 +163,7 @@ class Chat extends StatefulWidget {
 
   /// List of [types.Message] to render in the chat widget
   final List<types.Message> messages;
-  final Stream<types.Status> Function(types.Message) messageStatus;
+  final Stream<List<types.Status>> Function(types.Message) messageStatus;
 
   /// See [Input.onAttachmentPressed]
   final void Function()? onAttachmentPressed;
