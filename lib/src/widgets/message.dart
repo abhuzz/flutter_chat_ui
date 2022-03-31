@@ -86,7 +86,7 @@ class Message extends StatelessWidget {
   final Stream<List<types.Status>> Function(types.Message) messageStatus;
 
   /// returns message which populating in screen
-  final Function(types.Message, types.StatusType?)? messageRendering;
+  final Function(types.Message, List<types.Status>?)? messageRendering;
 
   /// Maximum message width
   final int messageWidth;
@@ -285,8 +285,7 @@ class Message extends StatelessWidget {
     }
   }
 
-  types.StatusType? calculateStatus(snapshot) {
-    List<types.Status> statusList = snapshot.data!;
+  types.StatusType? calculateStatus(List<types.Status> statusList) {
     int count = 100;
     for (var status in statusList) {
       types.StatusType? type = status.status;
@@ -466,10 +465,12 @@ class Message extends StatelessWidget {
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const SizedBox();
                   }
-                  types.StatusType? latestStatus = calculateStatus(snapshot);
+
+                  List<types.Status> statusList = snapshot.data!;
+                  types.StatusType? latestStatus = calculateStatus(statusList);
 
                   if (messageRendering != null) {
-                    messageRendering!(message, latestStatus);
+                    messageRendering!(message, statusList);
                   }
 
                   if (!_currentUserIsAuthor || !showStatus) {

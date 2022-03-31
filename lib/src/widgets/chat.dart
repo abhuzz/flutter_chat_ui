@@ -175,7 +175,7 @@ class Chat extends StatefulWidget {
   final void Function()? onBackgroundTap;
 
   /// returns message which populating in screen
-  final Function(types.Message, types.StatusType?)? messageRendering;
+  final Function(types.Message, List<types.Status>?)? messageRendering;
 
   /// See [ChatList.onEndReached]
   final Future<void> Function()? onEndReached;
