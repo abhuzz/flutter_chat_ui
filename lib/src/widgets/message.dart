@@ -308,9 +308,9 @@ class Message extends StatelessWidget {
       return types.StatusType.sending;
     } else if (count == 3) {
       return types.StatusType.sent;
-    } else if (count == 3) {
-      return types.StatusType.delivered;
     } else if (count == 4) {
+      return types.StatusType.delivered;
+    } else if (count == 5) {
       return types.StatusType.seen;
     }
 
