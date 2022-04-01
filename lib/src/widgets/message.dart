@@ -473,11 +473,11 @@ class Message extends StatelessWidget {
                     messageRendering!(message, statusList);
                   }
 
-                  if (!_currentUserIsAuthor || !showStatus) {
-                    return const SizedBox();
+                  if (_currentUserIsAuthor && showStatus) {
+                    return _statusBuilder(context, latestStatus);
                   }
 
-                  return _statusBuilder(context, latestStatus);
+                  return const SizedBox();
                 },
               ),
             ),
