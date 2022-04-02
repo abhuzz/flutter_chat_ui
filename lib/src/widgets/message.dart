@@ -449,39 +449,45 @@ class Message extends StatelessWidget {
             ),
           ),
           // if (_currentUserIsAuthor)
-          Padding(
-            padding: _currentUserIsAuthor
-                ? InheritedChatTheme.of(context).theme.statusIconPadding
-                : const EdgeInsets.all(0),
-            child: GestureDetector(
-              onLongPress: () =>
-                  onMessageStatusLongPress?.call(context, message),
-              onTap: () => onMessageStatusTap?.call(context, message),
-              // child: _statusBuilder(context),
-              child: StreamBuilder<List<types.Status>>(
-                initialData: const [],
-                stream: messageStatus(message),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const SizedBox();
-                  }
-
-                  List<types.Status> statusList = snapshot.data!;
-                  types.StatusType? latestStatus = calculateStatus(statusList);
-
-                  if (messageRendering != null) {
-                    messageRendering!(message, statusList);
-                  }
-
-                  if (_currentUserIsAuthor && showStatus) {
-                    return _statusBuilder(context, latestStatus);
-                  }
-
-                  return const SizedBox();
-                },
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: _currentUserIsAuthor
+          //       ? InheritedChatTheme.of(context).theme.statusIconPadding
+          //       : const EdgeInsets.all(0),
+          //   child: GestureDetector(
+          //     onLongPress: () =>
+          //         onMessageStatusLongPress?.call(context, message),
+          //     onTap: () => onMessageStatusTap?.call(context, message),
+          //     // child: _statusBuilder(context),
+          //     child: message.status != null &&
+          //             message.status == types.StatusType.seen
+          //         ? _currentUserIsAuthor && showStatus
+          //             ? _statusBuilder(context, types.StatusType.seen)
+          //             : const SizedBox()
+          //         : StreamBuilder<List<types.Status>>(
+          //             initialData: const [],
+          //             stream: messageStatus(message),
+          //             builder: (context, snapshot) {
+          //               if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          //                 return const SizedBox();
+          //               }
+          //
+          //               List<types.Status> statusList = snapshot.data!;
+          //               types.StatusType? latestStatus =
+          //                   calculateStatus(statusList);
+          //
+          //               if (messageRendering != null) {
+          //                 messageRendering!(message, statusList);
+          //               }
+          //
+          //               if (_currentUserIsAuthor && showStatus) {
+          //                 return _statusBuilder(context, latestStatus);
+          //               }
+          //
+          //               return const SizedBox();
+          //             },
+          //           ),
+          //   ),
+          // ),
         ],
       ),
     );
