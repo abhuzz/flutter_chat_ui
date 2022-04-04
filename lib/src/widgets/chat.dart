@@ -47,7 +47,7 @@ class Chat extends StatefulWidget {
     this.isLastPage,
     this.chatStrings = const ChatStrings(),
     required this.messages,
-    required this.messageStatus,
+    // required this.messageStatus,
     this.onAttachmentPressed,
     this.onAvatarTap,
     this.onBackgroundTap,
@@ -163,7 +163,7 @@ class Chat extends StatefulWidget {
 
   /// List of [types.Message] to render in the chat widget
   final List<types.Message> messages;
-  final Stream<List<types.Status>> Function(types.Message) messageStatus;
+  // final Stream<List<types.Status>> Function(types.Message) messageStatus;
 
   /// See [Input.onAttachmentPressed]
   final void Function()? onAttachmentPressed;
@@ -175,7 +175,8 @@ class Chat extends StatefulWidget {
   final void Function()? onBackgroundTap;
 
   /// returns message which populating in screen
-  final Function(types.Message, List<types.Status>?)? messageRendering;
+  // final Function(types.Message, List<types.Status>?)? messageRendering;
+  final Function(types.Message)? messageRendering;
 
   /// See [ChatList.onEndReached]
   final Future<void> Function()? onEndReached;
@@ -410,9 +411,9 @@ class _ChatState extends State<Chat> {
               ? min(constraints.maxWidth * 0.72, 440).floor()
               : min(constraints.maxWidth * 0.78, 440).floor();
 
-      // if(widget.messageRendering != null){
-      //   widget.messageRendering!(message);
-      // }
+      if(widget.messageRendering != null){
+        widget.messageRendering!(message);
+      }
 
       return Message(
         key: ValueKey(message.id),
@@ -423,8 +424,8 @@ class _ChatState extends State<Chat> {
         hideBackgroundOnEmojiMessages: widget.hideBackgroundOnEmojiMessages,
         imageMessageBuilder: widget.imageMessageBuilder,
         message: message,
-        messageStatus: widget.messageStatus,
-        messageRendering: widget.messageRendering,
+        // messageStatus: widget.messageStatus,
+        // messageRendering: widget.messageRendering,
         messageWidth: _messageWidth,
         onAvatarTap: widget.onAvatarTap,
         onMessageDoubleTap: widget.onMessageDoubleTap,

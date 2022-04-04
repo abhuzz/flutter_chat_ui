@@ -189,7 +189,7 @@ class _ChatPageState extends State<ChatPage> {
         bottom: false,
         child: Chat(
           messages: _messages,
-          messageStatus: allMessageStatus,
+          // messageStatus: allMessageStatus,
           onAttachmentPressed: _handleAtachmentPressed,
           onMessageTap: _handleMessageTap,
           onPreviewDataFetched: _handlePreviewDataFetched,
