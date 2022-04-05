@@ -507,7 +507,7 @@ class Message extends StatelessWidget {
               ],
             ),
           ),
-          // if (_currentUserIsAuthor)
+          if (_currentUserIsAuthor)
           Padding(
             padding: _currentUserIsAuthor
                 ? InheritedChatTheme.of(context).theme.statusIconPadding
