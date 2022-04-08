@@ -843,10 +843,6 @@ class _ChatState extends State<Chat> {
   }
 
   block() {
-    if (widget.room.blocks == null || widget.room.blocks!.isEmpty) {
-      return const SizedBox();
-    }
-
     bool blockedMe = _isBlockedMe();
     bool blockedByMe = _isBlockedByMe();
 
@@ -929,6 +925,8 @@ class _ChatState extends State<Chat> {
   }
 
   bool _isBlockedMe() {
+    if (widget.room.blocks == null || widget.room.blocks!.isEmpty) return false;
+
     types.Block? block = widget.room.blocks!
         .firstWhereOrNull((e) => e.blockedTo == widget.user.id);
     if (block != null) {
@@ -939,6 +937,8 @@ class _ChatState extends State<Chat> {
   }
 
   bool _isBlockedByMe() {
+    if (widget.room.blocks == null || widget.room.blocks!.isEmpty) return false;
+
     types.Block? block = widget.room.blocks!
         .firstWhereOrNull((e) => e.blockedBy == widget.user.id);
     if (block != null) {
