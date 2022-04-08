@@ -163,6 +163,7 @@ class Chat extends StatefulWidget {
 
   /// List of [types.Message] to render in the chat widget
   final List<types.Message> messages;
+
   // final Stream<List<types.Status>> Function(types.Message) messageStatus;
 
   /// See [Input.onAttachmentPressed]
@@ -411,7 +412,7 @@ class _ChatState extends State<Chat> {
               ? min(constraints.maxWidth * 0.72, 440).floor()
               : min(constraints.maxWidth * 0.78, 440).floor();
 
-      if(widget.messageRendering != null){
+      if (widget.messageRendering != null) {
         widget.messageRendering!(message);
       }
 
@@ -816,9 +817,18 @@ class _ChatState extends State<Chat> {
                                   ],
                                 ),
                         ],
-                      ] else if (widget.privacyEnabled &&
-                          widget.room.type == types.RoomType.direct) ...[
+                      ] else if (widget.room.type == types.RoomType.direct && ( _isBlockedMe() || _isBlockedByMe())) ...[
                         block(),
+                      ] else if (!_isBlockedMe() && !_isBlockedByMe()) ...[
+                        Input(
+                          isAttachmentUploading: widget.isAttachmentUploading,
+                          onAttachmentPressed: widget.onAttachmentPressed,
+                          onSendPressed: widget.onSendPressed,
+                          onTextChanged: widget.onTextChanged,
+                          onTextFieldTap: widget.onTextFieldTap,
+                          sendButtonVisibilityMode:
+                          widget.sendButtonVisibilityMode,
+                        ),
                       ]
                     ],
                   ),
@@ -837,21 +847,8 @@ class _ChatState extends State<Chat> {
       return const SizedBox();
     }
 
-    bool blockedMe = false;
-    bool blockedByMe = false;
-    types.Block? block = widget.room.blocks!
-        .firstWhereOrNull((e) => e.blockedTo == widget.user.id);
-    if (block != null) {
-      // someone blocked me
-      blockedMe = true;
-    }
-
-    block = widget.room.blocks!
-        .firstWhereOrNull((e) => e.blockedBy == widget.user.id);
-    if (block != null) {
-      // I blocked someone
-      blockedByMe = true;
-    }
+    bool blockedMe = _isBlockedMe();
+    bool blockedByMe = _isBlockedByMe();
 
     return Column(
       children: [
@@ -929,5 +926,26 @@ class _ChatState extends State<Chat> {
         ]
       ],
     );
+  }
+
+  bool _isBlockedMe() {
+    types.Block? block = widget.room.blocks!
+        .firstWhereOrNull((e) => e.blockedTo == widget.user.id);
+    if (block != null) {
+      // someone blocked me
+      return true;
+    }
+    return false;
+  }
+
+  bool _isBlockedByMe() {
+    types.Block? block = widget.room.blocks!
+        .firstWhereOrNull((e) => e.blockedBy == widget.user.id);
+    if (block != null) {
+      // I blocked someone
+      return true;
+    }
+
+    return false;
   }
 }
