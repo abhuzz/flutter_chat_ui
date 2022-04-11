@@ -88,6 +88,7 @@ class Chat extends StatefulWidget {
     this.onSendChatRequestTap,
     this.onBlockTap,
     this.onUnBlockTap,
+    this.showMessageStatus = true,
   }) : super(key: key);
 
   /// See [Message.avatarBuilder]
@@ -173,6 +174,7 @@ class Chat extends StatefulWidget {
 
   /// Localization
   final ChatStrings chatStrings;
+
   /// See [Message.isTextMessageTextSelectable]
   final bool isTextMessageTextSelectable;
 
@@ -303,6 +305,9 @@ class Chat extends StatefulWidget {
   /// this will allow chat with privacy feature
   final privacyEnabled;
 
+  /// hide/show message status
+  final bool showMessageStatus;
+
   @override
   _ChatState createState() => _ChatState();
 }
@@ -416,18 +421,18 @@ class _ChatState extends State<Chat> {
         return Align(
           alignment: Alignment.center,
           child: Container(
-          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-          decoration: BoxDecoration(
-            color: const Color(0xFF898989).withOpacity(0.2),
-            borderRadius: BorderRadius.circular(16.0),
+            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+            decoration: BoxDecoration(
+              color: const Color(0xFF898989).withOpacity(0.2),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            margin: widget.theme.dateDividerMargin,
+            child: Text(
+              object.text,
+              style: widget.theme.dateDividerTextStyle,
+            ),
           ),
-          margin: widget.theme.dateDividerMargin,
-          child: Text(
-            object.text,
-            style: widget.theme.dateDividerTextStyle,
-          ),
-        ),
-      );
+        );
       }
     } else if (object is MessageSpacer) {
       return SizedBox(
@@ -486,6 +491,7 @@ class _ChatState extends State<Chat> {
         dateFormat: widget.dateFormat,
         dateLocale: widget.dateLocale,
         timeFormat: widget.timeFormat,
+        showMessageStatus: widget.showMessageStatus,
       );
     }
   }
@@ -555,7 +561,8 @@ class _ChatState extends State<Chat> {
                                     onEndReached: widget.onEndReached,
                                     onEndReachedThreshold:
                                         widget.onEndReachedThreshold,
-                                    scrollController: widget.scrollController,scrollPhysics: widget.scrollPhysics,
+                                    scrollController: widget.scrollController,
+                                    scrollPhysics: widget.scrollPhysics,
                                   ),
                                 ),
                               ),
@@ -850,7 +857,8 @@ class _ChatState extends State<Chat> {
                                   ],
                                 ),
                         ],
-                      ] else if (widget.room.type == types.RoomType.direct && ( _isBlockedMe() || _isBlockedByMe())) ...[
+                      ] else if (widget.room.type == types.RoomType.direct &&
+                          (_isBlockedMe() || _isBlockedByMe())) ...[
                         block(),
                       ] else if (!_isBlockedMe() && !_isBlockedByMe()) ...[
                         Input(
@@ -860,7 +868,7 @@ class _ChatState extends State<Chat> {
                           onTextChanged: widget.onTextChanged,
                           onTextFieldTap: widget.onTextFieldTap,
                           sendButtonVisibilityMode:
-                          widget.sendButtonVisibilityMode,
+                              widget.sendButtonVisibilityMode,
                         ),
                       ]
                     ],

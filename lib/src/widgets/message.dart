@@ -53,6 +53,7 @@ class Message extends StatelessWidget {
     this.dateFormat,
     this.dateLocale,
     this.timeFormat,
+    required this.showMessageStatus,
   }) : super(key: key);
 
   /// This is to allow custom user avatar builder
@@ -155,6 +156,9 @@ class Message extends StatelessWidget {
   final DateFormat? dateFormat;
   final String? dateLocale;
   final DateFormat? timeFormat;
+
+  /// hide/show message status icons
+  final bool showMessageStatus;
 
   /// Build a text message inside predefined bubble.
   final Widget Function(
@@ -309,7 +313,8 @@ class Message extends StatelessWidget {
     return null;
   }
 
-  Widget _statusBuilderForInnerStatus(BuildContext context, types.StatusType? latestStatus) {
+  Widget _statusBuilderForInnerStatus(
+      BuildContext context, types.StatusType? latestStatus) {
     switch (latestStatus) {
       case types.StatusType.delivered:
         return InheritedChatTheme.of(context).theme.deliveredIcon != null
@@ -376,53 +381,53 @@ class Message extends StatelessWidget {
         return InheritedChatTheme.of(context).theme.deliveredIcon != null
             ? InheritedChatTheme.of(context).theme.deliveredIcon!
             : Image.asset(
-          'assets/icon-delivered.png',
-          color: InheritedChatTheme.of(context)
-              .theme
-              .deliveredMessageIconColor,
-          package: 'flutter_chat_ui',
-        );
+                'assets/icon-delivered.png',
+                color: InheritedChatTheme.of(context)
+                    .theme
+                    .deliveredMessageIconColor,
+                package: 'flutter_chat_ui',
+              );
       case types.StatusType.sent:
         return InheritedChatTheme.of(context).theme.sentIcon != null
             ? InheritedChatTheme.of(context).theme.sentIcon!
             : Image.asset(
-          'assets/icon-delivered.png',
-          color:
-          InheritedChatTheme.of(context).theme.sentMessageIconColor,
-          package: 'flutter_chat_ui',
-        );
+                'assets/icon-delivered.png',
+                color:
+                    InheritedChatTheme.of(context).theme.sentMessageIconColor,
+                package: 'flutter_chat_ui',
+              );
       case types.StatusType.error:
         return InheritedChatTheme.of(context).theme.errorIcon != null
             ? InheritedChatTheme.of(context).theme.errorIcon!
             : Image.asset(
-          'assets/icon-error.png',
-          color: InheritedChatTheme.of(context).theme.errorColor,
-          package: 'flutter_chat_ui',
-        );
+                'assets/icon-error.png',
+                color: InheritedChatTheme.of(context).theme.errorColor,
+                package: 'flutter_chat_ui',
+              );
       case types.StatusType.seen:
         return InheritedChatTheme.of(context).theme.seenIcon != null
             ? InheritedChatTheme.of(context).theme.seenIcon!
             : Image.asset(
-          'assets/icon-seen.png',
-          color: InheritedChatTheme.of(context).theme.primaryColor,
-          package: 'flutter_chat_ui',
-        );
+                'assets/icon-seen.png',
+                color: InheritedChatTheme.of(context).theme.primaryColor,
+                package: 'flutter_chat_ui',
+              );
       case types.StatusType.sending:
         return InheritedChatTheme.of(context).theme.sendingIcon != null
             ? InheritedChatTheme.of(context).theme.sendingIcon!
             : Center(
-          child: SizedBox(
-            height: 10,
-            width: 10,
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.transparent,
-              strokeWidth: 1.5,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                InheritedChatTheme.of(context).theme.primaryColor,
-              ),
-            ),
-          ),
-        );
+                child: SizedBox(
+                  height: 10,
+                  width: 10,
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.transparent,
+                    strokeWidth: 1.5,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      InheritedChatTheme.of(context).theme.primaryColor,
+                    ),
+                  ),
+                ),
+              );
       default:
         return const SizedBox();
     }
@@ -501,46 +506,46 @@ class Message extends StatelessWidget {
               ],
             ),
           ),
-          if (_currentUserIsAuthor)
-          Padding(
-            padding: _currentUserIsAuthor
-                ? InheritedChatTheme.of(context).theme.statusIconPadding
-                : const EdgeInsets.all(0),
-            child: GestureDetector(
-              onLongPress: () =>
-                  onMessageStatusLongPress?.call(context, message),
-              onTap: () => onMessageStatusTap?.call(context, message),
-              child: _statusBuilder(context),
-              // child: message.status != null &&
-              //         message.status == types.StatusType.seen
-              //     ? _currentUserIsAuthor && showStatus
-              //         ? _statusBuilder(context, types.StatusType.seen)
-              //         : const SizedBox()
-              //     : StreamBuilder<List<types.Status>>(
-              //         initialData: const [],
-              //         stream: messageStatus(message),
-              //         builder: (context, snapshot) {
-              //           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              //             return const SizedBox();
-              //           }
-              //
-              //           List<types.Status> statusList = snapshot.data!;
-              //           types.StatusType? latestStatus =
-              //               calculateStatus(statusList);
-              //
-              //           if (messageRendering != null) {
-              //             messageRendering!(message, statusList);
-              //           }
-              //
-              //           if (_currentUserIsAuthor && showStatus) {
-              //             return _statusBuilder(context, latestStatus);
-              //           }
-              //
-              //           return const SizedBox();
-              //         },
-              //       ),
+          if (showMessageStatus && _currentUserIsAuthor && showStatus)
+            Padding(
+              padding: _currentUserIsAuthor
+                  ? InheritedChatTheme.of(context).theme.statusIconPadding
+                  : const EdgeInsets.all(0),
+              child: GestureDetector(
+                onLongPress: () =>
+                    onMessageStatusLongPress?.call(context, message),
+                onTap: () => onMessageStatusTap?.call(context, message),
+                child: _statusBuilder(context),
+                // child: message.status != null &&
+                //         message.status == types.StatusType.seen
+                //     ? _currentUserIsAuthor && showStatus
+                //         ? _statusBuilder(context, types.StatusType.seen)
+                //         : const SizedBox()
+                //     : StreamBuilder<List<types.Status>>(
+                //         initialData: const [],
+                //         stream: messageStatus(message),
+                //         builder: (context, snapshot) {
+                //           if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                //             return const SizedBox();
+                //           }
+                //
+                //           List<types.Status> statusList = snapshot.data!;
+                //           types.StatusType? latestStatus =
+                //               calculateStatus(statusList);
+                //
+                //           if (messageRendering != null) {
+                //             messageRendering!(message, statusList);
+                //           }
+                //
+                //           if (_currentUserIsAuthor && showStatus) {
+                //             return _statusBuilder(context, latestStatus);
+                //           }
+                //
+                //           return const SizedBox();
+                //         },
+                //       ),
+              ),
             ),
-          ),
         ],
       ),
     );
