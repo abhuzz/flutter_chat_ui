@@ -15,6 +15,7 @@ import '../models/date_header.dart';
 import '../models/emoji_enlargement_behavior.dart';
 import '../models/message_spacer.dart';
 import '../models/preview_image.dart';
+import '../models/preview_tap_options.dart';
 import '../models/send_button_visibility_mode.dart';
 import '../util.dart';
 import 'chat_list.dart';
@@ -29,11 +30,13 @@ class Chat extends StatefulWidget {
   /// Creates a chat widget
   const Chat({
     Key? key,
+    this.avatarBuilder,
     this.bubbleBuilder,
     this.customBottomWidget,
     this.customDateHeaderText,
     this.customMessageBuilder,
     this.dateFormat,
+    this.dateHeaderBuilder,
     this.dateHeaderThreshold = 900000,
     this.dateLocale,
     this.disableImageGallery,
@@ -45,9 +48,11 @@ class Chat extends StatefulWidget {
     this.imageMessageBuilder,
     this.isAttachmentUploading,
     this.isLastPage,
+    this.isTextMessageTextSelectable = true,
     this.chatStrings = const ChatStrings(),
     required this.messages,
     // required this.messageStatus,
+    this.nameBuilder,
     this.onAttachmentPressed,
     this.onAvatarTap,
     this.onBackgroundTap,
@@ -64,6 +69,8 @@ class Chat extends StatefulWidget {
     required this.onSendPressed,
     this.onTextChanged,
     this.onTextFieldTap,
+    this.previewTapOptions = const PreviewTapOptions(),
+    this.scrollController,
     this.scrollPhysics,
     this.sendButtonVisibilityMode = SendButtonVisibilityMode.editing,
     this.showUserAvatars = false,
@@ -82,6 +89,9 @@ class Chat extends StatefulWidget {
     this.onBlockTap,
     this.onUnBlockTap,
   }) : super(key: key);
+
+  /// See [Message.avatarBuilder]
+  final Widget Function(String userId)? avatarBuilder;
 
   /// See [Message.bubbleBuilder]
   final Widget Function(
@@ -113,6 +123,9 @@ class Chat extends StatefulWidget {
   /// make sure you initialize your [DateFormat] with a locale. See [customDateHeaderText]
   /// for more customization.
   final DateFormat? dateFormat;
+
+  /// Custom date header builder gives ability to customize date header widget
+  final Widget Function(DateHeader)? dateHeaderBuilder;
 
   /// Time (in ms) between two messages when we will render a date header.
   /// Default value is 15 minutes, 900000 ms. When time between two messages
@@ -160,11 +173,16 @@ class Chat extends StatefulWidget {
 
   /// Localization
   final ChatStrings chatStrings;
+  /// See [Message.isTextMessageTextSelectable]
+  final bool isTextMessageTextSelectable;
 
   /// List of [types.Message] to render in the chat widget
   final List<types.Message> messages;
 
   // final Stream<List<types.Status>> Function(types.Message) messageStatus;
+
+  /// See [Message.nameBuilder]
+  final Widget Function(String userId)? nameBuilder;
 
   /// See [Input.onAttachmentPressed]
   final void Function()? onAttachmentPressed;
@@ -234,6 +252,12 @@ class Chat extends StatefulWidget {
 
   /// UnBlock button click
   final void Function()? onUnBlockTap;
+
+  /// See [Message.previewTapOptions]
+  final PreviewTapOptions previewTapOptions;
+
+  /// See [ChatList.scrollController]
+  final ScrollController? scrollController;
 
   /// See [ChatList.scrollPhysics]
   final ScrollPhysics? scrollPhysics;
@@ -353,8 +377,9 @@ class _ChatState extends State<Chat> {
             pageController: PageController(initialPage: _imageViewIndex),
             scrollPhysics: const ClampingScrollPhysics(),
           ),
-          Positioned(
-            right: 16,
+          Positioned.directional(
+            end: 16,
+            textDirection: Directionality.of(context),
             top: 56,
             child: CloseButton(
               color: Colors.white,
@@ -385,9 +410,12 @@ class _ChatState extends State<Chat> {
 
   Widget _messageBuilder(Object object, BoxConstraints constraints) {
     if (object is DateHeader) {
-      return Align(
-        alignment: Alignment.center,
-        child: Container(
+      if (widget.dateHeaderBuilder != null) {
+        return widget.dateHeaderBuilder!(object);
+      } else {
+        return Align(
+          alignment: Alignment.center,
+          child: Container(
           padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
           decoration: BoxDecoration(
             color: const Color(0xFF898989).withOpacity(0.2),
@@ -400,6 +428,7 @@ class _ChatState extends State<Chat> {
           ),
         ),
       );
+      }
     } else if (object is MessageSpacer) {
       return SizedBox(
         height: object.height,
@@ -418,16 +447,19 @@ class _ChatState extends State<Chat> {
 
       return Message(
         key: ValueKey(message.id),
+        avatarBuilder: widget.avatarBuilder,
         bubbleBuilder: widget.bubbleBuilder,
         customMessageBuilder: widget.customMessageBuilder,
         emojiEnlargementBehavior: widget.emojiEnlargementBehavior,
         fileMessageBuilder: widget.fileMessageBuilder,
         hideBackgroundOnEmojiMessages: widget.hideBackgroundOnEmojiMessages,
         imageMessageBuilder: widget.imageMessageBuilder,
+        isTextMessageTextSelectable: widget.isTextMessageTextSelectable,
         message: message,
         // messageStatus: widget.messageStatus,
         // messageRendering: widget.messageRendering,
         messageWidth: _messageWidth,
+        nameBuilder: widget.nameBuilder,
         onAvatarTap: widget.onAvatarTap,
         onMessageDoubleTap: widget.onMessageDoubleTap,
         onMessageLongPress: widget.onMessageLongPress,
@@ -443,6 +475,7 @@ class _ChatState extends State<Chat> {
         },
         onMessageVisibilityChanged: widget.onMessageVisibilityChanged,
         onPreviewDataFetched: _onPreviewDataFetched,
+        previewTapOptions: widget.previewTapOptions,
         roundBorder: map['nextMessageInGroup'] == true,
         showAvatar: map['nextMessageInGroup'] == false,
         showName: map['showName'] == true,
@@ -522,7 +555,7 @@ class _ChatState extends State<Chat> {
                                     onEndReached: widget.onEndReached,
                                     onEndReachedThreshold:
                                         widget.onEndReachedThreshold,
-                                    scrollPhysics: widget.scrollPhysics,
+                                    scrollController: widget.scrollController,scrollPhysics: widget.scrollPhysics,
                                   ),
                                 ),
                               ),

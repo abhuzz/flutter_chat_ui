@@ -5,12 +5,14 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../flutter_chat_ui.dart';
 import '../models/emoji_enlargement_behavior.dart';
+import '../models/preview_tap_options.dart';
 import '../util.dart';
 import 'file_message.dart';
 import 'image_message.dart';
 import 'inherited_chat_theme.dart';
 import 'inherited_user.dart';
 import 'text_message.dart';
+import 'user_avatar.dart';
 
 /// Base widget for all message types in the chat. Renders bubbles around
 /// messages and status. Sets maximum width for a message for
@@ -19,16 +21,19 @@ class Message extends StatelessWidget {
   /// Creates a particular message from any message type
   const Message({
     Key? key,
+    this.avatarBuilder,
     this.bubbleBuilder,
     this.customMessageBuilder,
     required this.emojiEnlargementBehavior,
     this.fileMessageBuilder,
     required this.hideBackgroundOnEmojiMessages,
     this.imageMessageBuilder,
+    required this.isTextMessageTextSelectable,
     required this.message,
     // required this.messageStatus,
     // this.messageRendering,
     required this.messageWidth,
+    this.nameBuilder,
     this.onAvatarTap,
     this.onMessageDoubleTap,
     this.onMessageLongPress,
@@ -37,6 +42,7 @@ class Message extends StatelessWidget {
     this.onMessageTap,
     this.onMessageVisibilityChanged,
     this.onPreviewDataFetched,
+    required this.previewTapOptions,
     required this.roundBorder,
     required this.showAvatar,
     required this.showName,
@@ -48,6 +54,10 @@ class Message extends StatelessWidget {
     this.dateLocale,
     this.timeFormat,
   }) : super(key: key);
+
+  /// This is to allow custom user avatar builder
+  /// By using this we can fetch newest user info based on id
+  final Widget Function(String userId)? avatarBuilder;
 
   /// Customize the default bubble using this function. `child` is a content
   /// you should render inside your bubble, `message` is a current message
@@ -80,6 +90,9 @@ class Message extends StatelessWidget {
   final Widget Function(types.ImageMessage, {required int messageWidth})?
       imageMessageBuilder;
 
+  /// See [TextMessage.isTextMessageTextSelectable]
+  final bool isTextMessageTextSelectable;
+
   /// Any message type
   final types.Message message;
 
@@ -92,7 +105,10 @@ class Message extends StatelessWidget {
   /// Maximum message width
   final int messageWidth;
 
-  // Called when uses taps on an avatar
+  /// See [TextMessage.nameBuilder]
+  final Widget Function(String userId)? nameBuilder;
+
+  /// See [UserAvatar.onAvatarTap]
   final void Function(types.User)? onAvatarTap;
 
   /// Called when user double taps on any message
@@ -117,6 +133,9 @@ class Message extends StatelessWidget {
   /// See [TextMessage.onPreviewDataFetched]
   final void Function(types.TextMessage, types.PreviewData)?
       onPreviewDataFetched;
+
+  /// See [TextMessage.previewTapOptions]
+  final PreviewTapOptions previewTapOptions;
 
   /// Rounds border of the message to visually group messages together.
   final bool roundBorder;
@@ -147,41 +166,10 @@ class Message extends StatelessWidget {
   /// See [TextMessage.usePreviewData]
   final bool usePreviewData;
 
-  Widget _avatarBuilder(BuildContext context) {
-    final color = getUserAvatarNameColor(
-      message.author,
-      InheritedChatTheme.of(context).theme.userAvatarNameColors,
-    );
-    final hasImage = message.author.imageUrl != null;
-    final initials = getUserInitials(message.author);
-
-    return showAvatar
-        ? Container(
-            margin: const EdgeInsets.only(right: 8),
-            child: GestureDetector(
-              onTap: () => onAvatarTap?.call(message.author),
-              child: CircleAvatar(
-                backgroundColor: hasImage
-                    ? InheritedChatTheme.of(context)
-                        .theme
-                        .userAvatarImageBackgroundColor
-                    : color,
-                backgroundImage:
-                    hasImage ? NetworkImage(message.author.imageUrl!) : null,
-                radius: 16,
-                child: !hasImage
-                    ? Text(
-                        initials,
-                        style: InheritedChatTheme.of(context)
-                            .theme
-                            .userAvatarTextStyle,
-                      )
-                    : null,
-              ),
-            ),
-          )
-        : const SizedBox(width: 40);
-  }
+  Widget _avatarBuilder() => showAvatar
+      ? avatarBuilder?.call(message.author.id) ??
+          UserAvatar(author: message.author, onAvatarTap: onAvatarTap)
+      : const SizedBox(width: 40);
 
   Widget _bubbleBuilder(
     BuildContext context,
@@ -276,8 +264,11 @@ class Message extends StatelessWidget {
             : TextMessage(
                 emojiEnlargementBehavior: emojiEnlargementBehavior,
                 hideBackgroundOnEmojiMessages: hideBackgroundOnEmojiMessages,
+                isTextMessageTextSelectable: isTextMessageTextSelectable,
                 message: textMessage,
+                nameBuilder: nameBuilder,
                 onPreviewDataFetched: onPreviewDataFetched,
+                previewTapOptions: previewTapOptions,
                 showName: showName,
                 usePreviewData: usePreviewData,
               );
@@ -448,31 +439,34 @@ class Message extends StatelessWidget {
                 emojiEnlargementBehavior, message as types.TextMessage);
     final _messageBorderRadius =
         InheritedChatTheme.of(context).theme.messageBorderRadius;
-    final _borderRadius = BorderRadius.only(
-      bottomLeft: Radius.circular(
+    final _borderRadius = BorderRadiusDirectional.only(
+      bottomEnd: Radius.circular(
+        _currentUserIsAuthor
+            ? roundBorder
+                ? _messageBorderRadius
+                : 0
+            : _messageBorderRadius,
+      ),
+      bottomStart: Radius.circular(
         _currentUserIsAuthor || roundBorder ? _messageBorderRadius : 0,
       ),
-      bottomRight: Radius.circular(_currentUserIsAuthor
-          ? roundBorder
-              ? _messageBorderRadius
-              : 0
-          : _messageBorderRadius),
-      topLeft: Radius.circular(_messageBorderRadius),
-      topRight: Radius.circular(_messageBorderRadius),
+      topEnd: Radius.circular(_messageBorderRadius),
+      topStart: Radius.circular(_messageBorderRadius),
     );
 
     return Container(
-      alignment:
-          _currentUserIsAuthor ? Alignment.centerRight : Alignment.centerLeft,
-      margin: const EdgeInsets.only(
+      alignment: _currentUserIsAuthor
+          ? AlignmentDirectional.centerEnd
+          : AlignmentDirectional.centerStart,
+      margin: const EdgeInsetsDirectional.only(
         bottom: 4,
-        left: 20,
+        start: 20,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (!_currentUserIsAuthor && showUserAvatars) _avatarBuilder(context),
+          if (!_currentUserIsAuthor && showUserAvatars) _avatarBuilder(),
           ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: messageWidth.toDouble(),
@@ -492,14 +486,14 @@ class Message extends StatelessWidget {
                                   visibilityInfo.visibleFraction > 0.1),
                           child: _bubbleBuilder(
                             context,
-                            _borderRadius,
+                            _borderRadius.resolve(Directionality.of(context)),
                             _currentUserIsAuthor,
                             _enlargeEmojis,
                           ),
                         )
                       : _bubbleBuilder(
                           context,
-                          _borderRadius,
+                          _borderRadius.resolve(Directionality.of(context)),
                           _currentUserIsAuthor,
                           _enlargeEmojis,
                         ),

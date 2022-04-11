@@ -194,6 +194,7 @@ List<Object> calculateChatMessages(
       chatMessages.insert(
         0,
         DateHeader(
+          dateTime: DateTime.fromMillisecondsSinceEpoch(message.createdAt!),
           text: customDateHeaderText != null
               ? customDateHeaderText(
                   DateTime.fromMillisecondsSinceEpoch(message.createdAt!),
@@ -211,11 +212,8 @@ List<Object> calculateChatMessages(
     chatMessages.insert(0, {
       'message': message,
       'nextMessageInGroup': nextMessageInGroup,
-      'showName': notMyMessage &&
-          showUserNames &&
-          showName &&
-          getUserName(message.author).isNotEmpty,
-      'showStatus': true,
+      'showName': notMyMessage && showUserNames && showName,
+      'showStatus': message.showStatus ?? true,
     });
 
     // if (!nextMessageInGroup) {
@@ -232,12 +230,14 @@ List<Object> calculateChatMessages(
       chatMessages.insert(
         0,
         DateHeader(
+          dateTime:
+              DateTime.fromMillisecondsSinceEpoch(nextMessage!.createdAt!),
           text: customDateHeaderText != null
               ? customDateHeaderText(
-                  DateTime.fromMillisecondsSinceEpoch(nextMessage!.createdAt!),
+                  DateTime.fromMillisecondsSinceEpoch(nextMessage.createdAt!),
                 )
               : getVerboseDateTimeRepresentation(
-                  DateTime.fromMillisecondsSinceEpoch(nextMessage!.createdAt!),
+                  DateTime.fromMillisecondsSinceEpoch(nextMessage.createdAt!),
                   dateFormat: dateFormat,
                   dateLocale: dateLocale,
                   timeFormat: timeFormat,
