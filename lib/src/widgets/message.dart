@@ -54,6 +54,7 @@ class Message extends StatelessWidget {
     this.dateLocale,
     this.timeFormat,
     required this.showMessageStatus,
+    required this.showMessageTime,
   }) : super(key: key);
 
   /// This is to allow custom user avatar builder
@@ -160,6 +161,9 @@ class Message extends StatelessWidget {
   /// hide/show message status icons
   final bool showMessageStatus;
 
+  /// hide/show message time
+  final bool showMessageTime;
+
   /// Build a text message inside predefined bubble.
   final Widget Function(
     types.TextMessage, {
@@ -212,7 +216,7 @@ class Message extends StatelessWidget {
         const SizedBox(
           height: 2,
         ),
-        if (message.createdAt != null)
+        if (showMessageTime && message.createdAt != null)
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -233,9 +237,10 @@ class Message extends StatelessWidget {
               ),
             ],
           ),
-        const SizedBox(
-          height: 2,
-        ),
+        if (showMessageTime && message.createdAt != null)
+          const SizedBox(
+            height: 2,
+          ),
       ],
     );
   }

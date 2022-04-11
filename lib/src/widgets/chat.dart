@@ -89,6 +89,7 @@ class Chat extends StatefulWidget {
     this.onBlockTap,
     this.onUnBlockTap,
     this.showMessageStatus = true,
+    this.showMessageTime = true,
   }) : super(key: key);
 
   /// See [Message.avatarBuilder]
@@ -308,6 +309,9 @@ class Chat extends StatefulWidget {
   /// hide/show message status
   final bool showMessageStatus;
 
+  /// hide/show message time
+  final bool showMessageTime;
+
   @override
   _ChatState createState() => _ChatState();
 }
@@ -492,6 +496,7 @@ class _ChatState extends State<Chat> {
         dateLocale: widget.dateLocale,
         timeFormat: widget.timeFormat,
         showMessageStatus: widget.showMessageStatus,
+        showMessageTime: widget.showMessageTime,
       );
     }
   }
