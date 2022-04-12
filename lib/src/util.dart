@@ -161,9 +161,7 @@ List<Object> calculateChatMessages(
             message.createdAt! - previousMessage!.createdAt! >
                 groupMessagesThreshold);
 
-    final previousMessageSameAuthor = message.author.id == previousMessage?.author.id;
-
-    lastMessageInGroup = previousMessageSameAuthor && !nextMessageSameAuthor &&
+    lastMessageInGroup = !nextMessageSameAuthor &&
         (messageHasCreatedAt &&
             previousMessage?.createdAt != null &&
             message.createdAt! - previousMessage!.createdAt! >
