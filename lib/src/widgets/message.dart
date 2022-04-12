@@ -468,10 +468,10 @@ class Message extends StatelessWidget {
       alignment: _currentUserIsAuthor
           ? AlignmentDirectional.centerEnd
           : AlignmentDirectional.centerStart,
-      margin: const EdgeInsetsDirectional.only(
-        bottom: 4,
-        start: 20,
-      ),
+      // margin: const EdgeInsetsDirectional.only(
+      //   bottom: 4,
+      //   start: 20,
+      // ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
