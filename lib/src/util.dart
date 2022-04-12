@@ -155,15 +155,18 @@ List<Object> calculateChatMessages(
 
     final previousMessage = isFirst ? null : messages[i + 1];
 
-    firstMessageInGroup = (message.author.id != previousMessage?.author.id) ||
+    final previousMessageSameAuthor =
+        message.author.id == previousMessage?.author.id;
+
+    firstMessageInGroup = !previousMessageSameAuthor &&
+        nextMessageSameAuthor &&
         (messageHasCreatedAt &&
             previousMessage?.createdAt != null &&
-            message.createdAt! - previousMessage!.createdAt! >
+            message.createdAt! - previousMessage!.createdAt! <
                 groupMessagesThreshold);
 
-    final previousMessageSameAuthor = message.author.id == previousMessage?.author.id;
-
-    lastMessageInGroup = previousMessageSameAuthor && !nextMessageSameAuthor &&
+    lastMessageInGroup = previousMessageSameAuthor &&
+        !nextMessageSameAuthor &&
         (messageHasCreatedAt &&
             previousMessage?.createdAt != null &&
             message.createdAt! - previousMessage!.createdAt! <
@@ -171,7 +174,12 @@ List<Object> calculateChatMessages(
 
     print('lastMessageInGroup --- $lastMessageInGroup');
     if (showUserNames) {
-      final isFirstInGroup = notMyMessage && firstMessageInGroup;
+      final isFirstInGroup =
+          notMyMessage && (message.author.id != previousMessage?.author.id) ||
+              (messageHasCreatedAt &&
+                  previousMessage?.createdAt != null &&
+                  message.createdAt! - previousMessage!.createdAt! >
+                      groupMessagesThreshold);
 
       if (isFirstInGroup) {
         shouldShowName = false;
