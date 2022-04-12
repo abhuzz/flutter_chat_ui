@@ -161,12 +161,15 @@ List<Object> calculateChatMessages(
             message.createdAt! - previousMessage!.createdAt! >
                 groupMessagesThreshold);
 
-    lastMessageInGroup = !nextMessageSameAuthor &&
+    final previousMessageSameAuthor = message.author.id == previousMessage?.author.id;
+
+    lastMessageInGroup = previousMessageSameAuthor && !nextMessageSameAuthor &&
         (messageHasCreatedAt &&
             previousMessage?.createdAt != null &&
-            message.createdAt! - previousMessage!.createdAt! >
+            message.createdAt! - previousMessage!.createdAt! <
                 groupMessagesThreshold);
 
+    print('lastMessageInGroup --- $lastMessageInGroup');
     if (showUserNames) {
       final isFirstInGroup = notMyMessage && firstMessageInGroup;
 

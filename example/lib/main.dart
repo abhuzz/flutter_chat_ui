@@ -194,6 +194,8 @@ class _ChatPageState extends State<ChatPage> {
           onMessageTap: _handleMessageTap,
           onPreviewDataFetched: _handlePreviewDataFetched,
           onSendPressed: _handleSendPressed,
+          groupMessagesThreshold: 24 * 60 * 60 * 1000,
+          dateHeaderThreshold: 24 * 60 * 60 * 1000,
           user: _user,
           room: const types.Room(id: 'roomIdrandom', requestedBy: 'id', type: types.RoomType.direct, users: [], status: types.RoomStatus.pending),
           chatStrings: const ChatStrings(
