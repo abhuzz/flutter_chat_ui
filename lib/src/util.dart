@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 
 import './models/date_header.dart';
 import './models/emoji_enlargement_behavior.dart';
-import './models/message_spacer.dart';
 import './models/preview_image.dart';
 
 /// Returns text representation of a provided bytes value (e.g. 1kB, 1GB)
@@ -131,8 +130,7 @@ List<Object> calculateChatMessages(
     final myMessage = message.author.id == user.id;
     if (message.deleteType == types.MessageDeleteType.everyone) {
       return true;
-    } else if (myMessage &&
-        message.deleteType == types.MessageDeleteType.me) {
+    } else if (myMessage && message.deleteType == types.MessageDeleteType.me) {
       return true;
     }
     return false;
@@ -151,17 +149,28 @@ List<Object> calculateChatMessages(
     var nextMessageDateThreshold = false;
     var nextMessageDifferentDay = false;
     var nextMessageInGroup = false;
+    var firstMessageInGroup = false;
+    var lastMessageInGroup = false;
     var showName = false;
 
-    if (showUserNames) {
-      final previousMessage = isFirst ? null : messages[i + 1];
+    final previousMessage = isFirst ? null : messages[i + 1];
 
-      final isFirstInGroup = notMyMessage &&
-          ((message.author.id != previousMessage?.author.id) ||
-              (messageHasCreatedAt &&
-                  previousMessage?.createdAt != null &&
-                  message.createdAt! - previousMessage!.createdAt! >
-                      groupMessagesThreshold));
+    firstMessageInGroup = (message.author.id != previousMessage?.author.id) ||
+        (messageHasCreatedAt &&
+            previousMessage?.createdAt != null &&
+            message.createdAt! - previousMessage!.createdAt! >
+                groupMessagesThreshold);
+
+    final previousMessageSameAuthor = message.author.id == previousMessage?.author.id;
+
+    lastMessageInGroup = previousMessageSameAuthor && !nextMessageSameAuthor &&
+        (messageHasCreatedAt &&
+            previousMessage?.createdAt != null &&
+            message.createdAt! - previousMessage!.createdAt! >
+                groupMessagesThreshold);
+
+    if (showUserNames) {
+      final isFirstInGroup = notMyMessage && firstMessageInGroup;
 
       if (isFirstInGroup) {
         shouldShowName = false;
@@ -214,6 +223,8 @@ List<Object> calculateChatMessages(
       'nextMessageInGroup': nextMessageInGroup,
       'showName': notMyMessage && showUserNames && showName,
       'showStatus': message.showStatus ?? true,
+      'firstMessageInGroup': firstMessageInGroup,
+      'lastMessageInGroup': lastMessageInGroup,
     });
 
     // if (!nextMessageInGroup) {

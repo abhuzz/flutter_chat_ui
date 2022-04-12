@@ -100,6 +100,8 @@ class Chat extends StatefulWidget {
     Widget child, {
     required types.Message message,
     required bool nextMessageInGroup,
+    required bool firstMessageInGroup,
+    required bool lastMessageInGroup,
   })? bubbleBuilder;
 
   /// Allows you to replace the default Input widget e.g. if you want to create
@@ -489,6 +491,8 @@ class _ChatState extends State<Chat> {
         showAvatar: map['nextMessageInGroup'] == false,
         showName: map['showName'] == true,
         showStatus: map['showStatus'] == true,
+        firstMessageInGroup: map['firstMessageInGroup'] == true,
+        lastMessageInGroup: map['lastMessageInGroup'] == true,
         showUserAvatars: widget.showUserAvatars,
         textMessageBuilder: widget.textMessageBuilder,
         usePreviewData: widget.usePreviewData,
