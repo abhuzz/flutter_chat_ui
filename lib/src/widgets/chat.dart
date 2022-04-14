@@ -42,6 +42,7 @@ class Chat extends StatefulWidget {
     this.disableImageGallery,
     this.emojiEnlargementBehavior = EmojiEnlargementBehavior.multi,
     this.emptyState,
+    this.userInfoWidget,
     this.fileMessageBuilder,
     this.groupMessagesThreshold = 60000,
     this.hideBackgroundOnEmojiMessages = true,
@@ -90,6 +91,7 @@ class Chat extends StatefulWidget {
     this.onUnBlockTap,
     this.showMessageStatus = true,
     this.showMessageTime = true,
+    this.showEmptyStateBuilder = false,
   }) : super(key: key);
 
   /// See [Message.avatarBuilder]
@@ -152,6 +154,8 @@ class Chat extends StatefulWidget {
   /// `emptyChatPlaceholder` and `emptyChatPlaceholderTextStyle` are ignored
   /// in this case.
   final Widget? emptyState;
+
+  final Widget? userInfoWidget;
 
   /// See [Message.fileMessageBuilder]
   final Widget Function(types.FileMessage, {required int messageWidth})?
@@ -314,6 +318,9 @@ class Chat extends StatefulWidget {
   /// hide/show message time
   final bool showMessageTime;
 
+  /// hide or show empty state builder default value is false
+  final bool showEmptyStateBuilder;
+
   @override
   _ChatState createState() => _ChatState();
 }
@@ -367,6 +374,11 @@ class _ChatState extends State<Chat> {
             textAlign: TextAlign.center,
           ),
         );
+  }
+
+  Widget _userInfoWidgetBuilder() {
+    return widget.userInfoWidget ??
+        const SizedBox();
   }
 
   Widget _imageGalleryBuilder() {
@@ -550,7 +562,7 @@ class _ChatState extends State<Chat> {
                   child: Column(
                     children: [
                       Flexible(
-                        child: widget.messages.isEmpty
+                        child: widget.showEmptyStateBuilder && widget.messages.isEmpty
                             ? SizedBox.expand(
                                 child: _emptyStateBuilder(),
                               )
@@ -572,6 +584,7 @@ class _ChatState extends State<Chat> {
                                         widget.onEndReachedThreshold,
                                     scrollController: widget.scrollController,
                                     scrollPhysics: widget.scrollPhysics,
+                                    userInfoWidget: _userInfoWidgetBuilder(),
                                   ),
                                 ),
                               ),
