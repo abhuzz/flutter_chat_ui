@@ -227,7 +227,7 @@ class _ChatListState extends State<ChatList>
         physics: widget.scrollPhysics,
         reverse: true,
         slivers: [
-          widget.userInfoWidget,
+          SliverToBoxAdapter(child: widget.userInfoWidget),
           SliverPadding(
             padding: const EdgeInsets.only(bottom: 4),
             sliver: SliverAnimatedList(
