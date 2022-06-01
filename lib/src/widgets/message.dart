@@ -152,7 +152,7 @@ class Message extends StatelessWidget {
       message.author,
       InheritedChatTheme.of(context).theme.userAvatarNameColors,
     );
-    final hasImage = message.author.imageUrl != null;
+    final hasImage = message.author.avatar != null;
     final initials = getUserInitials(message.author);
 
     return showAvatar
@@ -167,7 +167,7 @@ class Message extends StatelessWidget {
                         .userAvatarImageBackgroundColor
                     : color,
                 backgroundImage:
-                    hasImage ? NetworkImage(message.author.imageUrl!) : null,
+                    hasImage ? NetworkImage(message.author.avatar!) : null,
                 radius: 16,
                 child: !hasImage
                     ? Text(
