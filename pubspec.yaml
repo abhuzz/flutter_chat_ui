@@ -21,8 +21,9 @@ dependencies:
 #  flutter_link_previewer: ^2.6.3
   flutter_link_previewer:
     git: https://github.com/Pareshoct7/flutter_link_previewer.git
-  photo_view:
-    git: https://github.com/bluefireteam/photo_view.git
+  photo_view: ^0.14.0
+#  photo_view:
+#    git: https://github.com/bluefireteam/photo_view.git
   url_launcher: ^6.0.20
   visibility_detector: ^0.2.2
 
